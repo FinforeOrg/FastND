@@ -1,0 +1,2 @@
+class KeywordColumnsController < ApplicationController
+end

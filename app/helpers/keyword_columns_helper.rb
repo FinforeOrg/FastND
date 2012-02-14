@@ -1,0 +1,2 @@
+module KeywordColumnsHelper
+end
