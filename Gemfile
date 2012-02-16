@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.1.1'
+gem 'rails', '3.2.1'
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 
@@ -10,8 +10,8 @@ gem 'json'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sass-rails',   '~> 3.1.4'
-  gem 'coffee-rails', '~> 3.1.1'
+  gem 'sass-rails',   '~> 3.2.1'
+  gem 'coffee-rails', '~> 3.2.1'
   gem 'uglifier', '>= 1.0.3'
 end
 
@@ -22,13 +22,13 @@ gem 'request-log-analyzer'
 gem 'oink'
 
 gem 'rack-cors', :require => 'rack/cors', :path => "./vendor/gems/rack-cors"
-#gem 'journey', :path => "./vendor/gems/journey"
+gem 'gmoney', :path => "./vendor/gems/gmoney"
+gem 'gmail_xoauth', :path => "./vendor/gems/gmail_xoauth"
 gem 'crack'
 gem 'execjs'
 gem 'therubyracer'
 gem 'xml-simple'
-#gem 'SystemTimer'
-gem 'mongoid'
+gem 'mongoid', '2.4.3'
 gem 'bson_ext'
 gem 'jquery-rails'
 gem 'htmlentities'
