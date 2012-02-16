@@ -8,6 +8,7 @@ class UserFeed
   
   field :title, :type => String
   index :title
+  index :feed_info_id
   
   embedded_in :feed_account
   belongs_to :feed_info
