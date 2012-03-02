@@ -5,6 +5,8 @@ class Profile
   field :is_private, :type => Boolean
   
   index :title
+  index :profile_category_id
+
   default_scope where(:is_private => false)   
   has_and_belongs_to_many :users
   has_and_belongs_to_many :feed_infos

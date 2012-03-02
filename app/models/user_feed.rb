@@ -8,6 +8,7 @@ class UserFeed
   
   field :title, :type => String
   index :title
+  index :feed_info_id
   
   embedded_in :feed_account
   belongs_to :feed_info
@@ -72,14 +73,15 @@ class UserFeed
       if @feed_info_attributes["_id"].present?
         info = FeedInfo.where(:_id => @feed_info_attributes["_id"]).first
         info.update_attributes(@feed_info_attributes) if info
-      else
+      elsif self.feed_info_id.blank?
         info = FeedInfo.create(@feed_info_attributes)
-        if info
-          self.feed_info = info
-          #self.save
-        end
+        self.feed_info_id = info.id if info
       end 
     end
+    #elsif self.feed_info_id.present?
+    #   info = info = FeedInfo.where(:_id => self.feed_info_id).first
+    #   self.feed_info = info if info
+    #end
   end
 
 end
