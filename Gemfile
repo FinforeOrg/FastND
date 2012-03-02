@@ -76,4 +76,6 @@ end
 
 # To use debugger
 #gem 'ruby-debug'
-
+group :development do
+  gem 'foreman'
+end
