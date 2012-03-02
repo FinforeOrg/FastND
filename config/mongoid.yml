@@ -1,6 +1,7 @@
 development:
   host: localhost
   database: fastnd_db
+  autocreate_indexes: true
 
 test:
   host: localhost
