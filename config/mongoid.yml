@@ -1,0 +1,50 @@
+development:
+  host: localhost
+  database: fastnd_db
+
+test:
+  host: localhost
+  database: fastnd_db_test
+
+# set these environment variables on your prod server
+production:
+  host: <%= ENV['MONGOID_HOST'] %>
+  port: <%= ENV['MONGOID_PORT'] %>
+  username: <%= ENV['MONGOID_USERNAME'] %>
+  password: <%= ENV['MONGOID_PASSWORD'] %>
+  database: <%= ENV['MONGOID_DATABASE'] %>
+  # slaves:
+  #   - host: slave1.local
+  #     port: 27018
+  #   - host: slave2.local
+  #     port: 27019
+
+# production:
+#   host: pearl.mongohq.com
+#   port: 27021
+#   database: fastnd_staging
+#   username: fastnd
+#   password: F45tnD5tA6inG
+#   #slaves:
+#   #  - host: localhost
+#   #    port: 27018
+#   # - host: slave2.local
+#   # port: 27019
+#   #read_secondary: true
+#   #identity_map_enabled: false
+# development:
+#   host: pearl.mongohq.com
+#   port: 27021
+#   database: fastnd_staging
+#   username: fastnd
+#   password: F45tnD5tA6inG
+#   #host: localhost
+#   #database: finforenet_webservice
+#   #slaves:
+#   #  - host: localhost
+#   #    port: 27018
+#   # - host: slave2.local
+#   # port: 27019
+#   #read_secondary: true
+#   #identity_map_enabled: false
+  
