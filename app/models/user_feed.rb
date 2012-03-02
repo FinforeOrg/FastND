@@ -11,7 +11,7 @@ class UserFeed
   index :feed_info_id
   
   embedded_in :feed_account
-  belongs_to :feed_info
+  belongs_to :feed_info, :index => true
   attr_accessor :feed_info_attributes
   before_save :check_feed_info
 

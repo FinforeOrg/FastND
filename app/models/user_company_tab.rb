@@ -8,7 +8,7 @@ class UserCompanyTab
   field :position,     :type => Integer
   
   embedded_in :user
-  belongs_to :feed_info
+  belongs_to :feed_info, :index => true
   
   default_scope asc(:position)
   before_create :check_position

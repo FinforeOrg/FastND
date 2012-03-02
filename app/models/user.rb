@@ -37,7 +37,7 @@ class User
   embeds_many :access_tokens,     :cascade_callbacks => true
   embeds_many :feed_accounts,     :cascade_callbacks => true, :order => [[ :position, :asc ]]
   embeds_many :user_company_tabs, :cascade_callbacks => true, :order => [[ :position, :asc ]]
-  has_and_belongs_to_many :profiles
+  has_and_belongs_to_many :profiles, :index => true
 
   attr_accessor :selected_profiles
   

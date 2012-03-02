@@ -8,10 +8,10 @@ class Profile
   index :profile_category_id
 
   default_scope where(:is_private => false)   
-  has_and_belongs_to_many :users
-  has_and_belongs_to_many :feed_infos
-  has_and_belongs_to_many :populate_feed_infos
-  belongs_to :profile_category
+  has_and_belongs_to_many :users, :index => true
+  has_and_belongs_to_many :feed_infos, :index => true
+  has_and_belongs_to_many :populate_feed_infos, :index => true
+  belongs_to :profile_category, :index => true
   
   def self.without(disclude)
     self.all(:include=>:profile_category,
