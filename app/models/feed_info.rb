@@ -27,7 +27,7 @@ class FeedInfo
   has_many :price_tickers,       :dependent => :destroy
   #has_many :user_company_tabs,   :dependent => :destroy
   has_one  :company_competitor,  :dependent => :destroy
-  has_and_belongs_to_many :profiles
+  has_and_belongs_to_many :profiles, :index => true
   
   validates :title,    :presence => true
   validates :address,  :presence => true

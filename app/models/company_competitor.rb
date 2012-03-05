@@ -10,5 +10,5 @@ class CompanyCompetitor
   field :blog_keyword,      :type => String
   field :company_ticker,    :type => String
   
-  belongs_to :feed_info
+  belongs_to :feed_info, :index => true
 end

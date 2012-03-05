@@ -4,5 +4,5 @@ class PriceTicker
   field :ticker, :type => String
   index :ticker
   
-  belongs_to :feed_info  
+  belongs_to :feed_info, :index => true
 end
