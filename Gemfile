@@ -52,6 +52,9 @@ gem 'nokogiri'
 gem 'therubyracer'
 gem 'kaminari'
 gem 'capistrano'
+gem 'unicorn'
+gem 'foreman'
+
 
 group :test do
   gem 'factory_girl_rails'
@@ -77,7 +80,6 @@ end
 # To use debugger
 #gem 'ruby-debug'
 group :development do
-  gem 'foreman'
   gem 'thin'
   gem 'rpm_contrib'
   gem 'newrelic_rpm'
