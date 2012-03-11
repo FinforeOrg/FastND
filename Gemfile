@@ -28,7 +28,7 @@ gem 'crack'
 gem 'execjs'
 gem 'therubyracer'
 gem 'xml-simple'
-gem 'mongoid', '2.4.3'
+gem 'mongoid', '= 2.4.5'
 gem 'bson_ext'
 gem 'jquery-rails'
 gem 'htmlentities'
@@ -52,6 +52,9 @@ gem 'nokogiri'
 gem 'therubyracer'
 gem 'kaminari'
 gem 'capistrano'
+gem 'unicorn'
+gem 'foreman'
+
 
 group :test do
   gem 'factory_girl_rails'
@@ -76,4 +79,13 @@ end
 
 # To use debugger
 #gem 'ruby-debug'
-
+group :development do
+  gem 'thin'
+  gem 'rpm_contrib'
+  gem 'newrelic_rpm'
+  gem 'pry'
+  gem 'pry-remote'
+  gem 'pry-doc'
+  gem 'awesome_print'
+  gem 'letter_opener'
+end
