@@ -52,6 +52,8 @@ gem 'nokogiri'
 gem 'therubyracer'
 gem 'kaminari'
 gem 'capistrano'
+gem 'unicorn'
+gem 'foreman'
 
 group :test do
   gem 'factory_girl_rails'
@@ -65,6 +67,19 @@ group :test do
   gem 'simplecov'
   gem "mongoid-rspec", :path => "./vendor/gems/evansagge-mongoid-rspec-1.4.4-13" 
 end
+
+group :development do
+  gem 'foreman'
+  gem 'thin'
+  gem 'rpm_contrib'
+  gem 'newrelic_rpm'
+  gem 'pry'
+  gem 'pry-remote'
+  gem 'pry-doc'
+  gem 'awesome_print'
+  gem 'letter_opener'
+end
+
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 

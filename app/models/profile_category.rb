@@ -3,7 +3,7 @@ class ProfileCategory
   
   field :title, :type => String
   
-  has_many :profiles
+  has_many :profiles, :index => true
 
   def as_json(options={})
     
