@@ -11,7 +11,8 @@ describe UsersController do
 		 :email_work => "john@doe.net",
 		 :password => "johndoe123~",
 		 :password_confirmation => "johndoe123~",
-		 :feed_accounts_attributes => column_attributes
+		 :feed_accounts_attributes => column_attributes,
+		 :profile_ids => ["1230000000001","1230000000002","1230000000003"]
 		}
 	end
 	
@@ -53,7 +54,7 @@ describe UsersController do
 					},
 				]
 			},
-			{:name => "KEYWORD Column", :category => "rss", 
+			{:name => "KEYWORD Column", :category => "keyword", 
 				:keyword_column_attributes => {
 					:keyword => "lorem, ipsum, dolor, cit",
 					:is_aggregate => true,
@@ -85,8 +86,10 @@ describe UsersController do
 	
 	describe "POST create" do
 		it "assigns user creation" do
-			xhr :post, :create, valid_attributes
+			xhr :post, :create, {:user => valid_attributes}
 			assigns(:user).should_not be_nil
+			assigns(:user).should have(0).errors
+			assigns(:user).should have(3).user_profiles
 		end
 	end
 	
@@ -111,6 +114,7 @@ describe UsersController do
 				User.any_instance.stub(:save).and_return(false)
 				xhr :put, :update, auth_params(user).merge!(:user => {:email_work => ""})
 				assigns(:user).should eq(user)
+				assigns(:user).should have(1).error_on(:email_work)
 				response.status.should be 422 
 			end
 		end
