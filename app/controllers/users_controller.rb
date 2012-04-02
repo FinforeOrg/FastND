@@ -100,6 +100,7 @@ class UsersController < ApplicationController
     end
     
     def after_save(user, is_new = true)
+	    @user.check_profiles(user[:profile_ids]) if user[:profile_ids].present?
       @user.create_autopopulate if params[:auto_populate].present?
       UserMailer.welcome_email(@user, user[:password]).deliver if is_new
       api_responds(@user)

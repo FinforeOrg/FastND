@@ -1,0 +1,61 @@
+if @column.present? && @column.is_a?(FeedAccount)
+	_id @column.id
+	name @column.name
+	category @column.category
+	window_type @column.window_type
+	position @column.position
+	keyword_column @column.keyword_column do |kc|
+		_id kc.id
+		keyword kc.keyword
+		follower kc.follower
+		is_aggregate kc.is_aggregate
+	end if @column.isKeyword?
+	feed_token @column.feed_token do |ft|
+		_id ft.id
+		token ft.token
+		secret ft.secret
+		username ft.username
+	end if @column.feed_token.present?
+	user_feeds @column.user_feeds do |uf|
+		_id uf.id
+		title uf.title
+		feed_info uf.feedinfo do |fi|
+			_id fi.id
+			title fi.title
+			address fi.address
+			category fi.category
+			follower fi.follower
+		end if uf.feedinfo.present?
+	end
+elsif @column.present? && @column.is_a?(Array)
+	array @column do |column|
+		_id column.id
+		name column.name
+		category column.category
+		window_type column.window_type
+		position column.position
+		keyword_column column.keyword_column do |kc|
+			_id kc.id
+			keyword kc.keyword
+			follower kc.follower
+			is_aggregate kc.is_aggregate
+		end if column.isKeyword?
+		feed_token column.feed_token do |ft|
+			_id ft.id
+			token ft.token
+			secret ft.secret
+			username ft.username
+		end if column.feed_token.present?
+		user_feeds column.user_feeds do |uf|
+			_id uf.id
+			title uf.title
+			feed_info uf.feedinfo do |fi|
+				_id fi.id
+				title fi.title
+				address fi.address
+				category fi.category
+				follower fi.follower
+			end if uf.feedinfo.present?
+		end
+	end
+end

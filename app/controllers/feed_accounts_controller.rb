@@ -15,16 +15,37 @@ class FeedAccountsController < ApplicationController
   skip_before_filter :require_user, :only => [:column_callback]
 
   def index
-    respond_to do |format|
-       respond_to_do(format, current_user.feed_accounts)
-    end
+	  @columns = FeedAccount.includes([:user_feeds]).where(:user_id => current_user.id)
+	  api_responds(@columns)
   end
   
   def show
-	feed_account = current_user.feed_accounts.find(params[:id])
-	respond_to do |format|
-       respond_to_do(format, feed_account)
-    end
+	  @column = current_user.feed_accounts.where(:_id => params[:id]).first
+	  api_responds(@column)
+  end
+  
+  def create
+	  if params[:user]
+	  	current_user.update_attributes(params[:user])
+	  	result = current_user
+	  	@column = current_user.feed_accounts if result.valid?
+	  else
+	  	result = @column = current_user.feed_accounts.create(params[:feed_account])
+	  end
+	  error_responds(result) unless result.valid?
+	  api_responds(@column) if result.valid?
+	end
+
+  def update
+    @column = current_user.feed_accounts.where(:_id => params[:id]).first
+  	@column.update_attributes(params[:feed_account]) if @column
+    @column.valid? ? api_responds(@column) : error_responds(@error)
+  end
+
+  def destroy
+  	@column = current_user.feed_accounts.where(:_id => params[:id]).first
+  	@column.destroy if @column
+    api_responds(@column) 
   end
 
   def column_auth
@@ -79,36 +100,6 @@ class FeedAccountsController < ApplicationController
        accident_alert("SessionNotFound")
      end
   end
-  
-  def create
-	if params[:user]
-	  columns = current_user.update_attributes(params[:user])
-	else
-	  columns = current_user.feed_accounts.create(params[:feed_account])
-	end
-	
-    respond_to do |format|
-	  column_respond(format,columns)
-    end
-  end
-
-  def update
-	column = current_user.feed_accounts.find(params[:id])
-    column.update_attributes(params[:feed_account]) if column
-
-    respond_to do |format|
-      column_respond(format,column)
-    end
-  end
-
-  def destroy
-    column = current_user.feed_accounts.where(:_id => params[:id]).first
-    column.destroy if column
-
-    respond_to do |format|
-      column_respond(format,column)
-    end
-  end
 
   private
   
@@ -138,10 +129,10 @@ class FeedAccountsController < ApplicationController
         column_data = {}
 		token_data = {:token  => (category.match(/facebook/i) ? access_token.access_token : access_token.token),
                       :secret => (category.match(/facebook/i) ? '' : access_token.secret),
-		              :uid    => (category != "linkedin" ? profile['uid'] : profile['name'])}
+		              :username    => (category != "linkedin" ? profile['username'] : profile['name'])}
 		
         if stored_data[:column_id].blank?
-          column_data = {:name                  => (category != "linkedin" ? profile['uid'] : profile['name']),
+          column_data = {:name                  => (category != "linkedin" ? profile['username'] : profile['name']),
 		                 :window_type           => 'tab', 
 		                 :category              => category,
 		                 :feed_token_attributes => token_data}

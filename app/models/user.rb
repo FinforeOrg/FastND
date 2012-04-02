@@ -22,9 +22,8 @@ class User
   has_many :user_company_tabs, :dependent => :destroy, :autosave => true, :order => [[ :position, :asc ]]
   has_many :user_profiles,     :dependent => :destroy, :autosave => true, :class_name => "User::Profile"
 
-  attr_accessor :selected_profiles
-  
-  accepts_nested_attributes_for :access_tokens, :feed_accounts, :user_company_tabs
+  attr_accessor :selected_profiles, :profile_ids
+  accepts_nested_attributes_for :access_tokens, :feed_accounts, :user_company_tabs, :user_profiles
 
   validates_format_of :email_work, 
                       :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, 
@@ -173,6 +172,15 @@ class User
     categories = ProfileCategory.all
     focuses = categories.map{|c| [c.title, self.profiles.find_all_by_profile_category_id(c.id).map(&:title).join(',')]}
     return focuses
+  end
+  
+  def check_profiles(pids)
+    if pids.is_a?(Array) && pids.present?
+      self.user_profiles.delete_all if self.user_profiles.count > 0
+      pids.each do |pid|
+        User::Profile.create({:profile_id => pid, :user_id => self.id})
+      end
+    end
   end
 
 end
