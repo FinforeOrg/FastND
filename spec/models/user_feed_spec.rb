@@ -8,7 +8,7 @@ describe UserFeed do
   it { should have_fields(:title).of_type(String) }
   it { should have_index_for(:title) }
 
-  it { should be_embedded_in(:feed_account) }
+  it { should belong_to(:feed_account) }
   it { should belong_to(:feed_info) }
   
   it "should accept nested attributes for feed_info" do

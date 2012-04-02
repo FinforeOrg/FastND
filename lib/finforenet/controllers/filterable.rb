@@ -9,19 +9,20 @@ module Finforenet
       REGEX_URL   = /(^$)|(^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/ix
       
       included do
+	      include InstancesMethods
       end
 
       module ClassMethods
 	
       end
       
-      module InstanceMethods
-	    private
+      module InstancesMethods
+	      private
 	  
-		def random_characters
-		  chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
-		  return (0...16).map{ chars[rand(chars.size-1)] }.join
-		end
+		     def random_characters
+		       chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
+		       return (0...16).map{ chars[rand(chars.size-1)] }.join
+		     end
 	
       end
       

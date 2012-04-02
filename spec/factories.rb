@@ -29,7 +29,7 @@ FactoryGirl.define do
     token_preauth null
     secret_preauth null
     url_oauth null
-    uid null
+    username null
   end  
   
   factory :keyword_column_eastern_europe, :class => KeywordColumn do
@@ -66,7 +66,7 @@ FactoryGirl.define do
     category "linkedin"
     token "ae23da52-eb85-41c2-a5fd-99eae5b7964f"
     secret "4475606a-ed2b-4292-9092-4fc1cf1c6869"
-    uid "g-C_xaKPQb"
+    username "g-C_xaKPQb"
   end  
   
   factory :profile_technology, :class => Profile do
@@ -116,11 +116,13 @@ FactoryGirl.define do
   
   factory :feed_info_paribas, :class => FeedInfo do
     title "BNP Paribas"
-    address "€BNPP"
+    address "BNPP"
     category "Company"
     association :company_competitor, :factory => :company_competitor_boeing
   end
   
+  # Message: Poundsterling & Euro symbols were changed by yacobus
+  #          because they gave error when running rspec in console
   factory :company_competitor_paribas, :class => CompanyCompetitor do
     broadcast_keyword "\"BNP Paribas\""
     bing_keyword "EPA:BNP, \"BNP Paribas\""
@@ -129,7 +131,7 @@ FactoryGirl.define do
     finance_keyword "EPA:BNP"
     company_keyword "EPA:BNP, \"BNP Paribas\""
     competitor_ticker "EPA:GLE,EPA:ACA,BIT:UCG,BIT:BMPS,BIT:CRG,BIT:PMI,LON:BARC,LON:HSBC,LON:RBS,LON:LLOY,LON:STAN,NYSE:JPM,NYSE:BAC,NYSE:C,NYSE:GS,NYSE:MS"
-    keyword "€ISP,€BMPS,€CRG,€PMI,$HBC,$BAC,$C,$GS,$MS,£HSBA,£RBS,£LLOY,£STAN,$RBS,$LYG,£BARC,$BCS,€GLE,€ACA,€UCG"
+    keyword "ISP,BMPS,CRG,PMI,$HBC,$BAC,$C,$GS,$MS,HSBA,RBS,LLOY,STAN,$RBS,$LYG,BARC,$BCS,GLE,ACA,UCG"
   end  
   
   factory :feed_info_abb, :class => FeedInfo do

@@ -1,81 +1,63 @@
 FinforeWeb::Application.routes.draw do
   
   resources :users do 
-    get :forgot_password
-    get :profiles
-    get :contact_admin
+    collection do
+      get :forgot_password
+      get :profiles
+      get :contact_admin
+    end
   end
   resources :user_sessions do
     collection do
-      get  :create_network
-      post :create_network
-      get  :failure_network
-      post :failure_network
-      get  :network_sign_in
-      post :network_sign_in
-      get  :public_login
-      post :public_login
+      match  :create_network, :via => [:get, :post]
+      match  :failure_network, :via => [:get, :post]
+      match  :network_sign_in, :via => [:get, :post]
+      match  :public_login, :via => [:get, :post]
     end
   end
   
   resources :feed_accounts do
-	collection do 
-	  get :column_auth 
-	  get :column_callback
-	end
+	  collection do 
+	    get :column_auth 
+	    get :column_callback
+	  end
   end
   
   resources :tweetfores do
-	collection do
-      get :followers
-      get :friends
-      get :status_retweet
-      get :status_destroy
-      get :status_update
-      get :message_post
-      get :message_destroy
-      get :messages_sentbox
-      get :messages_inbox
-      get :home_timeline
-      get :mentions
-      get :search
-      get :friend_add
-      get :friend_remove
-      get :friends_pending
-      get :followers_pending
-      post :followers
-      post :friends
-      post :status_retweet
-      post :status_destroy
-      post :status_update
-      post :message_post
-      post :message_destroy
-      post :messages_sentbox
-      post :messages_inbox
-      post :home_timeline
-      post :mentions
-      post :search
-      post :friend_add
-      post :friend_remove
-      post :friends_pending
-      post :followers_pending
-	end
+	  collection do
+      match :followers, :via => [:get, :post]
+      match :friends, :via => [:get, :post]
+      match :status_retweet, :via => [:get, :post]
+      match :status_destroy, :via => [:get, :post]
+      match :status_update, :via => [:get, :post]
+      match :message_post, :via => [:get, :post]
+      match :message_destroy, :via => [:get, :post]
+      match :messages_sentbox, :via => [:get, :post]
+      match :messages_inbox, :via => [:get, :post]
+      match :home_timeline, :via => [:get, :post]
+      match :mentions, :via => [:get, :post]
+      match :search, :via => [:get, :post]
+      match :friend_add, :via => [:get, :post]
+      match :friend_remove, :via => [:get, :post]
+      match :friends_pending, :via => [:get, :post]
+      match :followers_pending, :via => [:get, :post]
+	  end
   end
   
   resources :linkedins do 
-	collection do 
-	  get :authenticate
+	  collection do 
+	    get :authenticate
       get :network_status
       get :callback
-	end
+	  end
   end
   
   resources :facebookers do
-	collection do
+	  collection do
       get :my
       get :publish
       get :search
-	end
+	  end
   end
   
   resources :portfolios do
@@ -84,15 +66,12 @@ FinforeWeb::Application.routes.draw do
       get  :transactions
       get  :positions
       get  :list
-      get  :agenda
-	  post :agenda 
-	  get  :save_portfolio
-      post :save_portfolio
       get  :delete_portfolio
-	  post :save_transaction
-      get  :save_transaction
       get  :delete_transaction
-	end
+      match :agenda,           :via => [:get, :post]
+      match :save_portfolio,   :via => [:get, :post]
+      match :save_transaction, :via => [:get, :post]
+	  end
   end
   
   resources :user_feeds

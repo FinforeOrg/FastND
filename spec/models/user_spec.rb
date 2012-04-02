@@ -5,29 +5,22 @@ describe User do
     @user = FactoryGirl.create(:user)
   end
   
-  it { should have_fields(:email_home).of_type(String) }
   it { should have_fields(:email_work).of_type(String) }
   it { should have_fields(:login).of_type(String) }
-  it { should have_fields(:full_name).of_type(String) }
-  it { should have_fields(:is_email_home_primary).of_type(Boolean).with_default_value_of(false) }  
+  it { should have_fields(:full_name).of_type(String) } 
   it { should have_fields(:is_online).of_type(Boolean).with_default_value_of(false) }  
   it { should have_fields(:is_public).of_type(Boolean).with_default_value_of(false) }  
   
-  it { should have_index_for(:email_home) }
   it { should have_index_for(:email_work) }
   it { should have_index_for(:login) }
   it { should have_index_for(:full_name) }
   
-  it { should embed_many(:access_tokens) }
-  it { should embed_many(:feed_accounts) }
-  it { should embed_many(:user_company_tabs) }
+  it { should have_many(:access_tokens) }
+  it { should have_many(:feed_accounts) }
+  it { should have_many(:user_company_tabs) }
   
-  it { should have_and_belong_to_many(:profiles) }
+  it { should have_many(:user_profiles) }
   it { should validate_format_of(:email_work) }
-  
-  it "should show user as json" do
-    @user.as_json.class.should == Hash
-  end
   
   
   it "should accept nested attributes for access_tokens" do
@@ -45,23 +38,23 @@ describe User do
   end
   
   it "should create_column" do
-    token = {:token  => "klnsadzlknsdasdlkmsdfkn", :secret => "bzbnwdkmasdkndknsdfknsdf", :uid => 12345}
+    token = {:token  => "klnsadzlknsdasdlkmsdfkn", :secret => "bzbnwdkmasdkndknsdfknsdf", :username => 12345}
     column = {:name => "Tech Podcasts",
       :window_type => 'tab', 
       :category  => "podcast", 
       :feed_token_attributes => token
     }    
-    @user.create_column(column).should_not be_empty
+    @user.create_column(column).should_not be false
   end  
   
   it "should have column with category portfolio" do
-    token = {:token  => "klnsadzlknsdasdlkmsdfkn", :secret => "bzbnwdkmasdkndknsdfknsdf", :uid => 12345}
+    token = {:token  => "klnsadzlknsdasdlkmsdfkn", :secret => "bzbnwdkmasdkndknsdfknsdf", :username => 12345}
     column = {:name => "Tech Podcasts", 
       :window_type => 'tab', 
       :category  => "portfolio", 
       :feed_token_attributes => token
     }    
-    @user.create_column(column).should_not be_empty
+    @user.create_column(column).should_not be false
   end  
   
   it "should create tab" do
@@ -87,7 +80,7 @@ describe User do
   end
   
   it "should have columns" do
-    token = {:token  => "klnsadzlknsdasdlkmsdfkn", :secret => "bzbnwdkmasdkndknsdfknsdf", :uid => 12345}
+    token = {:token  => "klnsadzlknsdasdlkmsdfkn", :secret => "bzbnwdkmasdkndknsdfknsdf", :username => 12345}
     column = {:name => "Tech Podcasts", 
       :window_type => 'tab', 
       :category  => "podcast", 
@@ -110,9 +103,9 @@ describe User do
     user.should be_nil
   end
   
-  it "should able find by uid" do
+  it "should able find by username" do
     @user.access_tokens << FactoryGirl.build(:access_token)
-    user = User.by_uid("g-C_xaKPQb")
+    user = User.by_username("g-C_xaKPQb")
     user.full_name.should == 'John Doe'
   end
   

@@ -1,52 +1,14 @@
-class FeedInfo
-  include Mongoid::Document
-  include Finforenet::Models::SharedQuery
-  include Finforenet::Models::Jsonable
-  
-  #Fields
-  field :title,       :type => String 
-  field :address,     :type => String 
-  field :category,    :type => String 
-  field :follower,    :type => Integer, :default => 0 
-  field :image,       :type => String 
-  field :description, :type => String
+class FeedInfo < Base::FeedInfo  
   field :is_populate, :type => Boolean, :default => false
-  #this indicates that feed_info is from user inputs
-  field :is_user,     :type => Boolean, :default => false 
-  
-  index :title
-  index :address
-  index :category
   index :is_populate
-  
-  #Associations
-  #Please do not use embeds to relations below, because they're separated collections
-  
-  #has_many :user_feeds,          :dependent => :destroy
-  has_many :populate_feed_infos, :dependent => :destroy, :index => true
-  has_many :price_tickers,       :dependent => :destroy, :index => true
-  #has_many :user_company_tabs,   :dependent => :destroy
-  has_one  :company_competitor,  :dependent => :destroy, :index => true
-  has_and_belongs_to_many :profiles, :index => true
-  
-  validates :title,    :presence => true
-  validates :address,  :presence => true
-  validates :category, :presence => true
 
-  #cache
-  
-  def as_json(options={})
-    if options[:include].blank?
-	  
-      options = {:include => {:price_tickers => {:only => [:ticker]}, 
-	                          :company_competitor => { :except=> [:feed_info_id] }, 
-	                          :profiles => {:only => [:_id,:title],:include  => profile_category_opts}
-	                         }, 
-	             :except => [:profile_ids]
-	            }
-    end
-    super(options)
-  end
+  validates :title,    :presence => true
+  #Associations
+  has_many :user_feeds,          :dependent => :destroy
+  has_many :price_tickers,       :dependent => :destroy
+  has_many :user_company_tabs,   :dependent => :destroy
+  has_one  :company_competitor,  :dependent => :destroy
+  has_many :feed_info_profiles,  :dependent => :destroy, :class_name => "FeedInfo::Profile"
 
   def self.filter_feeds_data(conditions, limit_no, page)
 	feed_infos = self.includes(:profiles) if conditions[:profile_ids]

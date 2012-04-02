@@ -11,18 +11,16 @@ describe FeedInfo do
     banking = FactoryGirl.create(:profile_banking)
     
     @user = FactoryGirl.create(:user)
-    @user.profiles.concat([technology, asset, banking])
+    #@user.profiles.concat([technology, asset, banking])
     
     equity = FactoryGirl.create(:feed_info_equity)
-    equity.profiles.concat([technology, asset, banking])
+    #equity.profiles.concat([technology, asset, banking])
     
     industrials = FactoryGirl.create(:feed_info_industrials)
-    industrials.profiles.concat([technology, asset, banking])
+    #industrials.profiles.concat([technology, asset, banking])
     
     asx = FactoryGirl.create(:feed_info_asx)
-    asx.profiles.concat([technology, asset, banking])
-    
-    
+    #asx.profiles.concat([technology, asset, banking])
     
   end  
   
@@ -33,17 +31,15 @@ describe FeedInfo do
   it { should have_fields(:image).of_type(String) }
   it { should have_fields(:description).of_type(String) }
   it { should have_fields(:is_populate).of_type(Boolean) }
-  it { should have_fields(:is_user).of_type(Boolean) }
   
   it { should have_index_for(:title) }
   it { should have_index_for(:address) }
   it { should have_index_for(:category) }
   it { should have_index_for(:is_populate) }
 
-  it { should have_many :populate_feed_infos }
   it { should have_many :price_tickers }
   it { should have_one(:company_competitor) }  
-  it { should have_and_belong_to_many(:profiles) }
+  it { should have_many(:feed_info_profiles) }
   
   it { should validate_presence_of(:title) }  
   it { should validate_presence_of(:address) }  

@@ -6,9 +6,9 @@ class FeedToken
   field :token_preauth,  :type => String
   field :secret_preauth, :type => String
   field :url_oauth,      :type => String
-  field :uid,            :type => String
+  field :username,       :type => String
   
-  index :uid
+  index :username
   index :token
   index :secret
   index :token_preauth

@@ -1,3 +1,15 @@
+# Parameters:
+# Create Column directly:
+# POST /feed_accounts.json
+#   * feed_account = {category: "rss", title: "New Rss Column"}
+#
+# Update Column directly:
+# PUT /feed_accounts/789000001.json
+#   * feed_account = {category: "rss", title: "Changed Title"}
+#
+# Delete Column directly:
+# DELETE /feed_accounts/789000001.json
+
 class FeedAccountsController < ApplicationController
   include Finforenet::Controllers::SocialNetwork
   skip_before_filter :require_user, :only => [:column_callback]

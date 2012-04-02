@@ -4,10 +4,10 @@ describe AccessToken do
   it { should have_fields(:category).of_type(String) }
   it { should have_fields(:token).of_type(String) }
   it { should have_fields(:secret).of_type(String) }
-  it { should have_fields(:uid).of_type(String) }
+  it { should have_fields(:username).of_type(String) }
 
   it { should have_index_for(:category) }
-  it { should have_index_for(:uid) }
+  it { should have_index_for(:username) }
   
-  it { should be_embedded_in(:user) }
+  it { should belong_to(:user) }
 end

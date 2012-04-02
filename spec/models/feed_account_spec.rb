@@ -12,17 +12,17 @@ describe FeedAccount do
   
   it { should have_index_for(:category) }
   
-  it { should be_embedded_in(:user) }
+  it { should belong_to(:user) }
   it { should embed_one(:feed_token) }
   it { should embed_one(:keyword_column) }
-  it { should embed_many(:user_feeds) }
+  it { should have_many(:user_feeds) }
   
   it { should validate_presence_of(:name) }
   it { should validate_presence_of(:category) }
   
   it "should create keyword" do
     user = FactoryGirl.create(:user)
-    token = {:token  => "klnsadzlknsdasdlkmsdfkn", :secret => "bzbnwdkmasdkndknsdfknsdf", :uid => 12345}
+    token = {:token  => "klnsadzlknsdasdlkmsdfkn", :secret => "bzbnwdkmasdkndknsdfknsdf", :username => 12345}
     column = {:name => "Tech Podcasts", 
       :window_type => 'tab', 
       :category  => "portfolio", 
@@ -33,7 +33,8 @@ describe FeedAccount do
     keyword = {:keyword => "private equity europe", :follower => "100", :is_aggregate => true}
     
     feed_account = user.feed_accounts.first
-    feed_account.create_keyword(keyword)
+    feed_account.keyword_column = KeywordColumn.new(keyword)
+    feed_account.save
     feed_account.keyword_column.should_not be_nil
   end
   

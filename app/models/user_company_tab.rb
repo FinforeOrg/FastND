@@ -7,7 +7,7 @@ class UserCompanyTab
   field :is_aggregate, :type => Boolean
   field :position,     :type => Integer
   
-  embedded_in :user
+  belongs_to :user
   belongs_to :feed_info, :index => true
   
   default_scope asc(:position)
