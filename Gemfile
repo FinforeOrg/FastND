@@ -19,7 +19,7 @@ gem 'rack-cors', :require => 'rack/cors', :path => "./vendor/gems/rack-cors"
 gem 'crack'
 
 #Database
-gem 'mongoid', '2.4.5'
+gem 'mongoid', '2.4.7'
 
 # Data Support Builders
 gem 'xml-simple'
