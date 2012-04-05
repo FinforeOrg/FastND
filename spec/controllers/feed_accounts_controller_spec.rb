@@ -17,7 +17,7 @@ describe FeedAccountsController do
 	end
 	
 	def column_parameter
-		{:feed_account => {:name => "RSS Column", :category => "rss", 
+		{:feed_account => {:title => "RSS Column", :category => "rss", 
 			:user_feeds_attributes => [
 				{:title => "Custom Rss", 
 				 :feed_info_attributes => {
@@ -32,7 +32,7 @@ describe FeedAccountsController do
 
 	def valid_column_attributes
 		[
-			{:name => "RSS Column", :category => "rss", 
+			{:title => "RSS Column", :category => "rss", 
 				:user_feeds_attributes => [
 					{:title => "Rss URL 1", 
 					 :feed_info_attributes => {
@@ -50,7 +50,7 @@ describe FeedAccountsController do
 					},
 				]
 			},
-			{:name => "PODCAST Column", :category => "podcast",
+			{:title => "PODCAST Column", :category => "podcast",
 				:user_feeds_attributes => [
 					{:title => "Podcast 1", 
 					 :feed_info_attributes => {
@@ -68,7 +68,7 @@ describe FeedAccountsController do
 					}
 				]
 			},
-			{:name => "KEYWORD Column", :category => "keyword", 
+			{:title => "KEYWORD Column", :category => "keyword", 
 				:keyword_column_attributes => {
 					:keyword => "lorem, ipsum, dolor, cit",
 					:is_aggregate => true,
@@ -141,16 +141,16 @@ describe FeedAccountsController do
 		it "assigns update column" do
 			create_user!
 			column = @user.feed_accounts.last
-			xhr :put, :update, auth_params(@user).merge!({:id => column.id.to_s, :feed_account => {:_id => column.id.to_s, :name => "foo" }})
+			xhr :put, :update, auth_params(@user).merge!({:id => column.id.to_s, :feed_account => {:_id => column.id.to_s, :title => "foo" }})
 			assigns(:column).should have(0).errors
-			assigns(:column).name.should == "foo"
+			assigns(:column).title.should == "foo"
 		end
 		it "assigns update column & create feed" do
 			create_user!
 			column = @user.feed_accounts.first
 			opts = {:feed_account => {
 				        :_id => column.id.to_s, 
-				        :name => "foo", 
+				        :title => "foo", 
 				        :user_feeds_attributes => [
 				        	{:title => "Podcast 1", 
 				        	 :feed_info_attributes => {
@@ -171,7 +171,7 @@ describe FeedAccountsController do
 			       }
 			xhr :put, :update, auth_params(@user).merge!(opts)
 			assigns(:column).should have(0).errors
-			assigns(:column).name.should == "foo"
+			assigns(:column).title.should == "foo"
 			assigns(:column).should have(4).user_feeds
 			assigns(:column).user_feeds.last.title.should == "Podcast 2"
 		end

@@ -55,14 +55,14 @@ user_company_tabs @user.user_company_tabs do |uct|
 		category fi.category
 		company_competitor fi.company_competitor do |cc|
 			_id cc.id
-			bing_keyword cc.bing_keyword.gsub(/\"/,'\"').gsub(/\,\,/,",")
-			blog_keyword cc.blog_keyword.gsub(/\"/,'\"').gsub(/\,\,/,",")
-			broadcast_keyword cc.broadcast_keyword.gsub(/\"/,'\"').gsub(/\,\,/,",")
-			company_keyword cc.company_keyword.gsub(/\"/,'\"').gsub(/\,\,/,",")
-			company_ticker cc.company_ticker.gsub(/\"/,'\"').gsub(/\,\,/,",")
-			competitor_ticker cc.competitor_ticker.gsub(/\"/,'\"').gsub(/\,\,/,",")
-			finance_keyword cc.finance_keyword.gsub(/\"/,'\"').gsub(/\,\,/,",")
-			keyword cc.keyword.gsub(/\"/,'\"').gsub(/\,\,/,",")
+			bing_keyword cc.bing_keyword.gsub(/\"/,'\"')
+			blog_keyword cc.blog_keyword.gsub(/\"/,'\"')
+			broadcast_keyword cc.broadcast_keyword.gsub(/\"/,'\"')
+			company_keyword cc.company_keyword.gsub(/\"/,'\"')
+			company_ticker cc.company_ticker.gsub(/\"/,'\"')
+			competitor_ticker cc.competitor_ticker.gsub(/\"/,'\"')
+			finance_keyword cc.finance_keyword.gsub(/\"/,'\"')
+			keyword cc.keyword.gsub(/\"/,'\"')
 		end
 	end
 end

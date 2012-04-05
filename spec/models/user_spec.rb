@@ -39,7 +39,7 @@ describe User do
   
   it "should create_column" do
     token = {:token  => "klnsadzlknsdasdlkmsdfkn", :secret => "bzbnwdkmasdkndknsdfknsdf", :username => 12345}
-    column = {:name => "Tech Podcasts",
+    column = {:title => "Tech Podcasts",
       :window_type => 'tab', 
       :category  => "podcast", 
       :feed_token_attributes => token
@@ -49,7 +49,7 @@ describe User do
   
   it "should have column with category portfolio" do
     token = {:token  => "klnsadzlknsdasdlkmsdfkn", :secret => "bzbnwdkmasdkndknsdfknsdf", :username => 12345}
-    column = {:name => "Tech Podcasts", 
+    column = {:title => "Tech Podcasts", 
       :window_type => 'tab', 
       :category  => "portfolio", 
       :feed_token_attributes => token
@@ -81,14 +81,14 @@ describe User do
   
   it "should have columns" do
     token = {:token  => "klnsadzlknsdasdlkmsdfkn", :secret => "bzbnwdkmasdkndknsdfknsdf", :username => 12345}
-    column = {:name => "Tech Podcasts", 
+    column = {:title => "Tech Podcasts", 
       :window_type => 'tab', 
       :category  => "podcast", 
       :feed_token_attributes => token
     }    
     @user.create_column(column)
     columns = @user.has_columns?
-    columns.should be_true
+    columns.should be true
   end
   
   it "should able find by id" do

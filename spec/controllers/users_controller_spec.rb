@@ -18,7 +18,7 @@ describe UsersController do
 	
 	def column_attributes
 		[
-			{:name => "RSS Column", :category => "rss", 
+			{:title => "RSS Column", :category => "rss", 
 				:user_feeds_attributes => [
 				  {:title => "Rss URL 1", 
 					 :feed_info_attributes => {
@@ -36,7 +36,7 @@ describe UsersController do
 					},
 				]
 			},
-			{:name => "PODCAST Column", :category => "podcast",
+			{:title => "PODCAST Column", :category => "podcast",
 				:user_feeds_attributes => [
 					{:title => "Podcast 1", 
 					 :feed_info_attributes => {
@@ -54,7 +54,7 @@ describe UsersController do
 					},
 				]
 			},
-			{:name => "KEYWORD Column", :category => "keyword", 
+			{:title => "KEYWORD Column", :category => "keyword", 
 				:keyword_column_attributes => {
 					:keyword => "lorem, ipsum, dolor, cit",
 					:is_aggregate => true,

@@ -5,7 +5,7 @@ describe FeedAccount do
     @feed_account = FeedAccount.new
   end
   
-  it { should have_fields(:name).of_type(String) }
+  it { should have_fields(:title).of_type(String) }
   it { should have_fields(:category).of_type(String) }
   it { should have_fields(:window_type).of_type(String) }
   it { should have_fields(:position).of_type(Integer) }
@@ -17,13 +17,13 @@ describe FeedAccount do
   it { should embed_one(:keyword_column) }
   it { should have_many(:user_feeds) }
   
-  it { should validate_presence_of(:name) }
+  it { should validate_presence_of(:title) }
   it { should validate_presence_of(:category) }
   
   it "should create keyword" do
     user = FactoryGirl.create(:user)
     token = {:token  => "klnsadzlknsdasdlkmsdfkn", :secret => "bzbnwdkmasdkndknsdfknsdf", :username => 12345}
-    column = {:name => "Tech Podcasts", 
+    column = {:title => "Tech Podcasts", 
       :window_type => 'tab', 
       :category  => "portfolio", 
       :feed_token_attributes => token

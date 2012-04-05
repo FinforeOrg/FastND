@@ -6,6 +6,7 @@ class UsersController < ApplicationController
   def show  
     access_denied unless is_owner?
     @user.create_autopopulate if params[:auto_populate].present?
+    get_profiles
     api_responds(@user)
   end
 
@@ -57,8 +58,8 @@ class UsersController < ApplicationController
   end
 
   def profiles
-     categories = ProfileCategory.with_public_profiles
-     api_responds(categories)
+     @categories = ProfileCategory.all
+     api_responds(@categories)
   end
 
   def contact_admin
@@ -87,7 +88,8 @@ class UsersController < ApplicationController
     end
     
     def prepare_user
-      @user = User.includes([:feed_accounts]).where(:_id => params[:id]).first
+	    opts = {:feed_accounts => {:includes => {:user_feeds => :feed_info}}}, {:user_company_tabs => {:includes => {:feed_info => :company_competitor}}}
+      @user = User.includes(opts).where(:_id => params[:id]).first
     end
     
     def is_owner?
@@ -103,10 +105,15 @@ class UsersController < ApplicationController
 	    @user.check_profiles(user[:profile_ids]) if user[:profile_ids].present?
       @user.create_autopopulate if params[:auto_populate].present?
       UserMailer.welcome_email(@user, user[:password]).deliver if is_new
+      get_profiles
       api_responds(@user)
     end
     
     def is_updatable?(user)
       @user.errors.size < 1 && @user.update_attributes(user)
     end
+    
+    def get_profiles
+	    @profiles = Profile.where({:_id.in => @user.user_profiles.map(&:profile_id)})
+	  end
 end

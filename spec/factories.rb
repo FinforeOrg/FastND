@@ -51,13 +51,13 @@ FactoryGirl.define do
   end  
   
   factory :feed_account_portfolio, :class => FeedAccount do
-    name "portfolio"
+    title "portfolio"
     category "portfolio"
     window_type null
   end  
   
   factory :feed_account_rss, :class => FeedAccount do
-    name "FT WSJ and Economist"
+    title "FT WSJ and Economist"
     category "rss" 
     window_type "tab"
   end  

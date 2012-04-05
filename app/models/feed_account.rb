@@ -31,7 +31,7 @@ class FeedAccount
   include Finforenet::Models::SharedQuery
   
   #Fields
-  field :name,        :type => String
+  field :title,        :type => String
   field :category,    :type => String
   field :window_type, :type => String,  :default => "tab"
   field :position,    :type => Integer, :default => -1
@@ -51,7 +51,7 @@ class FeedAccount
   before_create :check_position
   
   validates :category, :presence => true
-  validates :name,     :presence => true
+  validates :title,     :presence => true
   validates :user_id,  :presence => true
   
   def create_keyword_column(opts={})

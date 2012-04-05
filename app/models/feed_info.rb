@@ -10,18 +10,9 @@ class FeedInfo < Base::FeedInfo
   has_one  :company_competitor,  :dependent => :destroy
   has_many :feed_info_profiles,  :dependent => :destroy, :class_name => "FeedInfo::Profile"
 
-  def self.filter_feeds_data(conditions, limit_no, page)
-	feed_infos = self.includes(:profiles) if conditions[:profile_ids]
-	feed_infos = self.where(conditions).asc(:title)
-	#feed_infos = feed_infos.limit(limit_no) unless limit_no.blank?
-	#unless page.blank?
-	#  if page == 1
-	#	offset_no = 0 
-	#  else
-	#	offset_no = page * limit_no
-	#  end
-	#end
-	#feed_infos = feed_infos.offset(offset_no) 
+  def self.filter_feeds_data(conditions, _limit, _page)
+	  feed_infos = self.includes(:feed_info_profiles) if conditions[:_id]
+	  feed_infos = self.where(conditions).asc(:title).page(_page).per(_limit)
     return feed_infos
   end
 
@@ -32,9 +23,10 @@ class FeedInfo < Base::FeedInfo
   end
 
   def self.all_sort_title(conditions)
-	self.includes(:price_tickers).where(conditions).asc(:title)
+	  self.includes(:price_tickers).where(conditions).asc(:title)
   end
 
+  #TODO : Tear down this method if not used yet
   def self.search_populates(options,is_company_tab=false)
     feed_infos = self.where(options)
     if is_company_tab

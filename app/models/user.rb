@@ -132,14 +132,14 @@ class User
     _remain = []
     _selecteds = []
     _users.each do |_user|
-      _remain = pids - _user.profiles.map{|profile| profile.id.to_s}
+      _remain = pids - _user.user_profiles.map{|up| up.profile_id.to_s}
       if _remain.size < 1
         #_user.profile_ids = pids
         _user.selected_profiles = pids
         _selecteds = pids
         _return = _user
         break
-      elsif _remain.size < _user.profiles.count 
+      elsif _remain.size < _user.user_profiles.count 
         if _garbage.size < 1
           _garbage.push({:user => _user,:remain_size => _remain.size}) 
         else

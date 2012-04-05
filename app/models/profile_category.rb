@@ -11,7 +11,7 @@ class ProfileCategory
   
   private
     def self.public_opts
-      {"profiles.is_private" => false}
+      {"profiles.is_private" => {"$ne" => true}}
     end
 
 end
