@@ -1,6 +1,6 @@
 array @columns do |column|
 	_id column.id
-	title column.title
+	name column.title
 	category column.category
 	window_type column.window_type
 	position column.position

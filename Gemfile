@@ -1,10 +1,10 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.2.1'
+gem 'rails', '3.2.2'
 
 group :assets do
-  gem 'sass-rails',   '~> 3.2.1'
-  gem 'coffee-rails', '~> 3.2.1'
+  gem 'sass-rails',   '~> 3.2.2'
+  gem 'coffee-rails', '~> 3.2.2'
   gem 'uglifier', '>= 1.0.3'
 end
 
@@ -28,7 +28,7 @@ gem 'json'
 gem 'json_builder'
 gem 'jquery-rails'
 gem 'yajl-ruby'
-gem 'nokogiri'
+gem 'nokogiri', '>= 1.5.0'
 gem 'profanity_filter'
 
 # Background Job & Queue
@@ -52,6 +52,7 @@ gem 'authlogic'
 # Social Networking
 gem 'gmoney', :path => "./vendor/gems/gmoney"
 gem 'linkedin'
+#, :git => 'git://github.com/pengwynn/linkedin.git'
 gem 'fgraph'
 
 # Spam Assasin
@@ -74,7 +75,7 @@ gem 'foreman'
 
 group :test do
   gem 'factory_girl_rails'
-  gem 'cucumber-rails'
+  gem 'cucumber-rails', '>= 1.1.1'
   gem 'capybara'
   gem 'database_cleaner'
   gem 'rspec'
