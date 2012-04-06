@@ -12,7 +12,7 @@ FinforeWeb::Application.configure do
   config.serve_static_assets = false
 
   # Compress JavaScripts and CSS
-  config.assets.compress = false
+  config.assets.compress = true
 
   # Don't fallback to assets pipeline if a precompiled asset is missed
   config.assets.compile = false
@@ -31,7 +31,7 @@ FinforeWeb::Application.configure do
   # config.force_ssl = true
 
   # See everything in the log (default is :info)
-   config.log_level = :debug
+   config.log_level = :info
 
   # Use a different logger for distributed setups
   # config.logger = SyslogLogger.new

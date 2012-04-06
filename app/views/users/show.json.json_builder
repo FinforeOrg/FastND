@@ -42,37 +42,37 @@ feed_accounts @user.feed_accounts do |column|
 			category fi.category
 			follower fi.follower.to_i
 if fi.price_tickers.count > 0
-                price_tickers fi.price_tickers do |pt|
-                        _id pt.id
-                        ticker pt.ticker
-                end
-                description fi.description.to_s
-        else
-                description fi.description.to_s
-        end
+								price_tickers fi.price_tickers do |pt|
+												_id pt.id
+												ticker pt.ticker
+								end
+								description fi.description.to_s
+				else
+								description fi.description.to_s
+				end
 		end if uf.feedinfo.present?
 	end
 end
 user_company_tabs @user.user_company_tabs do |uct|
-  _id uct.id
-  follower uct.follower.to_i
-  is_aggregate uct.is_aggregate
-  position uct.position.to_i
-  feed_info_id uct.feed_info_id
-  feed_info uct.feed_info do |fi|
-    title fi.title
-    address fi.address
-    category fi.category
-    company_competitor fi.company_competitor do |cc|
-      _id cc.id
-      bing_keyword cc.bing_keyword.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
-      blog_keyword cc.blog_keyword.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
-      broadcast_keyword cc.broadcast_keyword.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
-      company_keyword cc.company_keyword.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
-      company_ticker cc.company_ticker.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
-      competitor_ticker cc.competitor_ticker.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
-      finance_keyword cc.finance_keyword.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
-      keyword cc.keyword.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
-    end
-  end
+	_id uct.id
+	follower uct.follower.to_i
+	is_aggregate uct.is_aggregate
+	position uct.position.to_i
+	feed_info_id uct.feed_info_id
+	feed_info uct.feed_info do |fi|
+		title fi.title
+		address fi.address
+		category fi.category
+		company_competitor fi.company_competitor do |cc|
+			_id cc.id
+			bing_keyword cc.bing_keyword.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
+			blog_keyword cc.blog_keyword.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
+			broadcast_keyword cc.broadcast_keyword.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
+			company_keyword cc.company_keyword.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
+			company_ticker cc.company_ticker.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
+			competitor_ticker cc.competitor_ticker.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
+			finance_keyword cc.finance_keyword.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
+			keyword cc.keyword.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
+		end
+	end
 end

@@ -198,7 +198,7 @@ class UserSessionsController < ApplicationController
       return params[:user_session]
     end
 
-    def on_login_success(format)
+    def on_login_success
       @user = User.where(:login=>@user_session.record.login).first
       api_responds(@user)
     end

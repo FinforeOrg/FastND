@@ -7,7 +7,7 @@ class UsersController < ApplicationController
     access_denied unless is_owner?
     @user.create_autopopulate if params[:auto_populate].present?
     get_profiles
-    api_responds(@user)
+    api_responds(@user){ render :partial => "users/info"}
   end
 
   # POST /users.xml
