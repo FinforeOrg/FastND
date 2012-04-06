@@ -32,7 +32,6 @@ class FeedAccount
   
   #Fields
   field :name,        :type => String
-  field :title,       :type => String
   field :category,    :type => String
   field :window_type, :type => String,  :default => "tab"
   field :position,    :type => Integer, :default => -1
@@ -53,8 +52,7 @@ class FeedAccount
   before_validation :override_title
   
   validates :category, :presence => true
-  validates :title,    :presence => true, :if => :title_exist?
-  validates :name,     :presence => true, :if => :name_exist?
+  validates :name,     :presence => true
   validates :user_id,  :presence => true
   
   def create_keyword_column(opts={})
@@ -121,21 +119,6 @@ class FeedAccount
   
   def isFeedable?
     isPodcast? || isRss? || isCompany?
-  end
-  
-  # when goes to production code please remove this
-  # because the current web-app uses name field instead of title
-  def override_title
-    self.name = self.title
-    self.title = self.name
-  end
-  
-  def name_exist?
-    self.name.present?
-  end
-  
-  def title_exist?
-    self.title.present?
   end
   
 end

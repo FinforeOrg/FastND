@@ -1,6 +1,6 @@
 if @column.present? && @column.is_a?(FeedAccount)
 	_id @column.id
-	name @column.title||@column.name
+	name @column.name
 	category @column.category
 	window_type @column.window_type
 	position @column.position

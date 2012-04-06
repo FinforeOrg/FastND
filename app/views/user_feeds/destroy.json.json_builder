@@ -1,9 +1,2 @@
 _id @user_feed.id
 title @user_feed.title
-feed_info @user_feed.feedinfo do |fi|
-	_id fi.id
-	title fi.title
-	address fi.address
-	category fi.category
-	follower fi.follower
-end if @user_feed.feedinfo.present?
