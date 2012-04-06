@@ -4,12 +4,14 @@ class FeedInfosController < ApplicationController
 
   def index  
     prepare_list_for_user if current_user
+    @feed_infos = Kaminari.paginate_array(@feed_infos).page(params[:page]||1).per(params[:per_page]||25) if @paginateable
 	  api_responds(@feed_infos)
   end
 
   private 
     
     def prepare_condition
+      @paginateable = false
       @feed_infos = []
       @show_all = is_show_all
       @conditions = FeedInfo.send("#{@category}_query")
@@ -23,11 +25,12 @@ class FeedInfosController < ApplicationController
     def prepare_list_for_user
       if !is_chart_or_all_companies && !@show_all
         @feed_infos = FeedInfo.filter_feeds_data(@conditions,(params[:per_page]||25), params[:page]||1)
-		    #sanitize_feed_info_profile unless @show_all
+        @paginateable = true
       elsif is_all_companies
          @feed_infos = CompanyCompetitor.all.map(&:feed_info)
       elsif is_chart || @show_all
-        @feed_infos = FeedInfo.all_sort_title(@conditions,(params[:per_page]||25), (params[:page]||1), @show_al)
+        @feed_infos = FeedInfo.all_sort_title(@conditions)
+        @paginateable = true if @show_all
       end
     end
 

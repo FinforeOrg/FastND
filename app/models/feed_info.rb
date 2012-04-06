@@ -12,8 +12,7 @@ class FeedInfo < Base::FeedInfo
 
   def self.filter_feeds_data(conditions, _limit, _page)
 	  feed_infos = self.includes(:feed_info_profiles) if conditions[:_id]
-	  feed_infos = self.where(conditions).asc(:title).page(_page).per(_limit)
-    return feed_infos
+	  return self.where(conditions).asc(:title)
   end
 
   def self.all_with_competitor(conditions)
@@ -22,10 +21,8 @@ class FeedInfo < Base::FeedInfo
     return results
   end
 
-  def self.all_sort_title(conditions, _limit, _page, is_all)
-    _result = self.includes(:price_tickers).where(conditions).asc(:title)
-    _result = _result.page(_page).per(_limit) if is_all
-    return _result
+  def self.all_sort_title(conditions)
+    return self.includes(:price_tickers).where(conditions).asc(:title)
   end
 
   #TODO : Tear down this method if not used yet
