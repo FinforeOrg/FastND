@@ -53,7 +53,8 @@ class FeedAccount
   before_validation :override_title
   
   validates :category, :presence => true
-  validates :title,     :presence => true
+  validates :title,    :presence => true, :if => :title_exist?
+  validates :name,     :presence => true, :if => :name_exist?
   validates :user_id,  :presence => true
   
   def create_keyword_column(opts={})
@@ -127,6 +128,14 @@ class FeedAccount
   def override_title
     self.name = self.title
     self.title = self.name
+  end
+  
+  def name_exist?
+    self.name.present?
+  end
+  
+  def title_exist?
+    self.title.present?
   end
   
 end

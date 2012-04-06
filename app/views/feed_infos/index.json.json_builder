@@ -13,24 +13,4 @@ array @feed_infos do |fi|
 			title pc.title
 		end
 	end
-	company_competitor fi.company_competitor do |cc|
-		_id cc.id
-		bing_keyword cc.bing_keyword.to_s.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
-		blog_keyword cc.blog_keyword.to_s.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
-		broadcast_keyword cc.broadcast_keyword.to_s.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
-		company_keyword cc.company_keyword.to_s.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
-		company_ticker cc.company_ticker.to_s.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
-		competitor_ticker cc.competitor_ticker.to_s.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
-		finance_keyword cc.finance_keyword.to_s.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
-		keyword cc.keyword.to_s.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
-	end if fi.company_competitor.present?
-	if fi.price_tickers.count > 0
-		price_tickers fi.price_tickers do |pt|
-			_id pt.id
-			ticker pt.ticker
-		end
-		description fi.description.to_s
-	else
-		description fi.description.to_s
-	end
 end
