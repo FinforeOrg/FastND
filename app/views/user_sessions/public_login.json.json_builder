@@ -25,7 +25,7 @@ user @user do |user|
 	end
 	feed_accounts @user.feed_accounts do |column|
 		_id column.id
-		title column.title.to_s
+		name column.title.to_s
 		category column.category
 		window_type column.window_type
 		position column.position
@@ -50,6 +50,15 @@ user @user do |user|
 				address fi.address
 				category fi.category
 				follower fi.follower.to_i
+				if fi.price_tickers.count > 0
+					price_tickers fi.price_tickers do |pt|
+						_id pt.id
+						ticker pt.ticker
+					end
+					description fi.description.to_s
+				else
+					description fi.description.to_s
+				end
 			end if uf.feedinfo.present?
 		end
 	end
