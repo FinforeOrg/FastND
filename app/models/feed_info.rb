@@ -22,8 +22,10 @@ class FeedInfo < Base::FeedInfo
     return results
   end
 
-  def self.all_sort_title(conditions)
-	  self.includes(:price_tickers).where(conditions).asc(:title)
+  def self.all_sort_title(conditions, _limit, _page, is_all)
+    _result = self.includes(:price_tickers).where(conditions).asc(:title)
+    _result = _result.page(_page).per(_limit) if is_all
+    return _result
   end
 
   #TODO : Tear down this method if not used yet

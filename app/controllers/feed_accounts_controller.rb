@@ -30,7 +30,7 @@ class FeedAccountsController < ApplicationController
 	  	result = current_user
 	  	@column = current_user.feed_accounts if result.valid?
 	  else
-	  	result = @column = current_user.feed_accounts.create(params[:feed_account])
+	  	result = @column = FeedAccount.create(params[:feed_account].merge!({:user_id => current_user.id}))
 	  end
 	  error_responds(result) unless result.valid?
 	  api_responds(@column) if result.valid?

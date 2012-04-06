@@ -51,7 +51,7 @@ module FinforeWeb
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
-    #config.filter_parameters << :password << :password_confirmation
+    config.filter_parameters << :password << :password_confirmation
 
     config.middleware.use "::ExceptionNotifier",
       :email_prefix => "[FinforeNet Error] ",
@@ -71,7 +71,6 @@ module FinforeWeb
       cor.allow do |allow|
         allow.origins "*"
         allow.resource "/*", :methods => [:get, :post, :put, :delete, :options]
-        allow.resource "/cobas/*", :methods => [:get, :post, :put, :delete, :options]
         allow.resource "/users/*", :methods => [:get, :post, :put, :delete, :options]
         allow.resource "/user_sessions/*", :methods => [:get, :post, :put, :delete, :options]
         allow.resource "/feed_accounts/*", :methods => [:get, :post, :put, :delete, :options]

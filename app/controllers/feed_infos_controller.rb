@@ -1,4 +1,5 @@
 class FeedInfosController < ApplicationController
+  caches_action :index, :cache_path => Proc.new { |c| c.params }
   before_filter :prepare_condition, :only => [:index]
 
   def index  
@@ -26,7 +27,7 @@ class FeedInfosController < ApplicationController
       elsif is_all_companies
          @feed_infos = CompanyCompetitor.all.map(&:feed_info)
       elsif is_chart || @show_all
-        @feed_infos = FeedInfo.all_sort_title(@conditions)
+        @feed_infos = FeedInfo.all_sort_title(@conditions,(params[:per_page]||25), (params[:page]||1), @show_al)
       end
     end
 

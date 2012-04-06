@@ -16,12 +16,13 @@ FinforeWeb::Application.configure do
 
   # Don't fallback to assets pipeline if a precompiled asset is missed
   config.assets.compile = false
-
+  config.assets.paths << Rails.root.join("public", "webapp", "mobile")
+  config.assets.paths << Rails.root.join("public", "webapp", "production")
   # Generate digests for assets URLs
   #config.assets.digest = true
 
   # Defaults to Rails.root.join("public/assets")
-   config.assets.manifest = Rails.root.join("public/webapp")
+  # config.assets.manifest = Rails.root.join("public/webapp")
 
   # Specifies the header that your server uses for sending files
   # config.action_dispatch.x_sendfile_header = "X-Sendfile" # for apache
