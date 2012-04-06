@@ -49,7 +49,6 @@ class FeedAccount
   default_scope asc(:position)
   
   before_create :check_position
-  before_validation :override_title
   
   validates :category, :presence => true
   validates :name,     :presence => true

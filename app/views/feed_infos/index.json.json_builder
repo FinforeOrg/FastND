@@ -4,4 +4,17 @@ array @feed_infos do |fi|
 	address fi.address.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
 	category fi.category
 	follower fi.follower.to_i
+        if @category =~ /all_companies/i && current_user.is_public
+                company_competitor fi.company_competitor do |cc|
+		        _id cc.id
+		        bing_keyword cc.bing_keyword.to_s.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
+		        blog_keyword cc.blog_keyword.to_s.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
+		        broadcast_keyword cc.broadcast_keyword.to_s.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
+		        company_keyword cc.company_keyword.to_s.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
+		        company_ticker cc.company_ticker.to_s.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
+		        competitor_ticker cc.competitor_ticker.to_s.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
+		        finance_keyword cc.finance_keyword.to_s.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
+		        keyword cc.keyword.to_s.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
+	        end if fi.company_competitor.present?
+        end
 end
