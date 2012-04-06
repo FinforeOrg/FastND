@@ -4,13 +4,4 @@ array @feed_infos do |fi|
 	address fi.address.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
 	category fi.category
 	follower fi.follower.to_i
-	profiles Profile.where({:_id.in => fi.feed_info_profiles.map(&:profile_id)}).to_a do |profile|
-		_id profile.id
-		title profile.title
-		is_private profile.is_private
-		profile_category profile.profile_category do |pc|
-			_id pc.id
-			title pc.title
-		end
-	end
 end

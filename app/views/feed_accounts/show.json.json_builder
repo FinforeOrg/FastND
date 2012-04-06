@@ -1,5 +1,5 @@
 _id @column.id
-name @column.title
+name @column.title||@column.name
 category @column.category
 window_type @column.window_type
 position @column.position

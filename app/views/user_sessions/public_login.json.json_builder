@@ -25,7 +25,7 @@ user @user do |user|
 	end
 	feed_accounts @user.feed_accounts do |column|
 		_id column.id
-		name column.title.to_s
+		name column.title||column.name
 		category column.category
 		window_type column.window_type
 		position column.position
