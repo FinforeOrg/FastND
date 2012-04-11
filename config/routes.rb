@@ -1,9 +1,11 @@
 FinforeWeb::Application.routes.draw do
   
   resources :users do 
-    get :forgot_password
-    get :profiles
-    get :contact_admin
+    collection do
+      get :forgot_password
+      get :profiles
+      get :contact_admin
+    end
   end
   resources :user_sessions do
     collection do

@@ -2,6 +2,7 @@ require 'bundler/capistrano'
 set :application, "FastND"
 set :domain, "api.finfore.net"
 set :repository,  "git@github.com:FinforeOrg/FastND.git"
+set :branch, "master"
 set :scm, :git
 set :branch, "master"
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
