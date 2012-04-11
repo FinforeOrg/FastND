@@ -132,7 +132,7 @@ class User
   end
   
   def self.by_uid(access_uid)
-    User.includes([:access_tokens]).where({"access_tokens.uid" => access_uid}).first
+    User.where({"access_tokens.uid" => access_uid}).first
   end
   
   def self.auth_by_security(auth_token, auth_session)

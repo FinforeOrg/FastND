@@ -105,6 +105,11 @@ class UserSessionsController < ApplicationController
         current_user
       end
     end
+logger.debug "*********"
+logger.debug user
+if user.present?
+logger.debug user.errors.full_messages
+end
 
     respond_to do |format|
       if user.blank?
@@ -116,6 +121,8 @@ class UserSessionsController < ApplicationController
 		  param_auth = "auth_token=#{user.single_access_token}&auth_secret=#{user.persistence_token}&user_id=#{user.id}"
 		  param_auth = param_auth + (user.profiles.length < 1 ? "&update_profile=true" : "&update_profile=false")
 		  redirect_uri = stored_data[:callback] + ((stored_data[:callback].scan(/\?/i).size > 0) ? "&" : "?") + param_auth
+logger.debug redirect_uri
+logger.debug "*********"
 		  format.html {redirect_to redirect_uri}
         end
       end
