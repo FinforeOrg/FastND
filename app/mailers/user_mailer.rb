@@ -1,5 +1,5 @@
 class UserMailer < ActionMailer::Base
-  default :to => "info@finfore.net"
+  default :to => "info@fastnd.com"
 
   def welcome_email(user,password)
     @user = user
@@ -10,7 +10,7 @@ class UserMailer < ActionMailer::Base
 
    def new_user_to_admin(user)
      @user = user
-     mail(:subject => "FastND - New Member", :from => "info@finfore.net")
+     mail(:subject => "FastND - New Member", :from => "info@fastnd.com")
    end
 
    def contact(to, subject, options)
@@ -32,7 +32,7 @@ class UserMailer < ActionMailer::Base
                :sent_on => Time.now,
                :full_name => user.full_name
              }
-     mail(:subject => "FinforeNet - Forgot Password and Email", :from => "info@finfore.net", :to => user.login)
+     mail(:subject => "FastND - Forgot Password and Email", :from => "info@fastnd.com", :to => user.login)
    end
 
 end
