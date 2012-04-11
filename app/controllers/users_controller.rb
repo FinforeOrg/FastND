@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   skip_filter :require_user, :only => [:new, :create, :forgot_password, :profiles]
   before_filter :prepare_user, :only => [:show, :create, :update]
+  caches_action :profiles
   
   # GET /users/:id.json
   def show  

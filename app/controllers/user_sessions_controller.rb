@@ -3,7 +3,8 @@ class UserSessionsController < ApplicationController
   
   skip_before_filter :require_user,         :except => [:destroy]
   before_filter      :destroy_user_session, :only   => [:create]
-  
+
+  caches_action :public_login, :cache_path => Proc.new { |c| c.params }  
   
   def create
     @user_session = UserSession.new(credential_information)
@@ -82,8 +83,9 @@ class UserSessionsController < ApplicationController
 				else
 				  user_access_token = user.access_tokens.first
 				  user_access_token.update_attributes(access_token_attr)
-				  accounts = user.feed_accounts.includes(:feed_token).where("feed_token.username" => user_access_token.username)
-				  accounts.each do |account|
+				  #accounts = user.feed_accounts.includes(:feed_token).where("feed_token.username" => user_access_token.username)
+				  accounts = user.feed_accounts.select{|fa| fa if fa.feed_token.present? && fa.feed_token.username == user_access_token.username}
+                                  accounts.each do |account|
 					  account.feed_token.update_attributes({:token          => access_token.token, 
 					                                        :secret         => access_token.secret, 
 					                                        :token_preauth  => "", 
