@@ -3,6 +3,7 @@ set :application, "FastND"
 set :domain, "api.finfore.net"
 set :repository,  "git@github.com:FinforeOrg/FastND.git"
 set :scm, :git
+set :branch, "staging"
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
 
 set :deploy_to, "/var/www/FastND"
