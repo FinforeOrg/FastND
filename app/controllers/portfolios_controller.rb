@@ -11,8 +11,7 @@ class PortfoliosController < ApplicationController
   DEFAULT_PASSWORD = '44London'
 
   #caches_action :agenda, :cache_path => Proc.new { |controller| controller.params }, :expires_in => 4.hours
-  #caches_action :overviews, :cache_path => Proc.new { |controller| controller.params }, :expires_in => 2.hours
-  caches_action :public_login, :cache_path => Proc.new { |c| c.params }, :expires_in => 72.hours
+  caches_action :overviews, :cache_path => Proc.new { |controller| controller.params }, :expires_in => 72.hours
   caches_action :list, :cache_path => Proc.new { |c| c.params }, :expires_in => 72.hours
   
   def agenda
