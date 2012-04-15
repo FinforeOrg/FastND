@@ -71,12 +71,12 @@ FactoryGirl.define do
   
   factory :profile_technology, :class => Profile do
     title "Technology"
-    is_private true
+    is_private false
   end  
   
   factory :profile_asset, :class => Profile do
     title "Asset Management"
-    is_private true
+    is_private false
   end  
   
   factory :profile_banking, :class => Profile do
@@ -86,7 +86,30 @@ FactoryGirl.define do
   
   factory :gmail_feed_api, :class => FeedApi do
     category "gmail"
-    
+  end
+  
+  factory :twitter_feed_api, :class => FeedApi do
+    category "twitter"
+  end
+  
+  factory :linkedin_feed_api, :class => FeedApi do
+    category "linkedin"
+  end
+  
+  factory :google_feed_api, :class => FeedApi do
+    category "google"
+  end
+  
+  factory :facebook_feed_api, :class => FeedApi do
+    category "facebook"
+  end
+  
+  factory :geografic_category, :class => ProfileCategory do
+    name "geographic"
+  end
+  
+  factory :industry_category, :class => ProfileCategory do
+    name "industry"
   end
 
   factory :nyse_company, :class => CompanyCompetitor do

@@ -16,5 +16,8 @@ array @feed_infos do |fi|
 		        finance_keyword cc.finance_keyword.to_s.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
 		        keyword cc.keyword.to_s.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
 	        end if fi.company_competitor.present?
+                description fi.description
+        else
+          description fi.description
         end
 end

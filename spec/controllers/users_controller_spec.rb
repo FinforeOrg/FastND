@@ -18,7 +18,7 @@ describe UsersController do
 	
 	def column_attributes
 		[
-			{:title => "RSS Column", :category => "rss", 
+			{:name => "RSS Column", :category => "rss", 
 				:user_feeds_attributes => [
 				  {:title => "Rss URL 1", 
 					 :feed_info_attributes => {
@@ -36,7 +36,7 @@ describe UsersController do
 					},
 				]
 			},
-			{:title => "PODCAST Column", :category => "podcast",
+			{:name => "PODCAST Column", :category => "podcast",
 				:user_feeds_attributes => [
 					{:title => "Podcast 1", 
 					 :feed_info_attributes => {
@@ -54,7 +54,7 @@ describe UsersController do
 					},
 				]
 			},
-			{:title => "KEYWORD Column", :category => "keyword", 
+			{:name => "KEYWORD Column", :category => "keyword", 
 				:keyword_column_attributes => {
 					:keyword => "lorem, ipsum, dolor, cit",
 					:is_aggregate => true,
@@ -103,7 +103,7 @@ describe UsersController do
 			it "updates the requested user's column" do
 				user = User.create! valid_attributes
 				column = user.feed_accounts.first
-				changes = {'_id' => column.id.to_s, 'title' => 'Lorem'}
+				changes = {'_id' => column.id.to_s, 'name' => 'Lorem'}
 				FeedAccount.any_instance.should_receive(:update_attributes).with(changes)
 				xhr :put, :update, auth_params(user).merge!(:user => {'feed_accounts_attributes' => [changes]})
 			end

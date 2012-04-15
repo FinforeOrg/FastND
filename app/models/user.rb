@@ -121,6 +121,14 @@ class User
     return user
   end
   
+  def self.auth_by_token(params)
+    if params[:auth_secret].blank?
+      self.auth_by_security(params[:auth_token],params[:auth_session])
+    else
+      self.auth_by_persistence(params[:auth_token],params[:auth_secret])
+    end
+  end
+  
   def self.auth_by_persistence(auth_token, auth_persistence)
     self.where({:single_access_token => auth_token, :persistence_token => auth_persistence}).first
   end
@@ -159,6 +167,10 @@ class User
     end
     return {:user => _return, :selecteds => _selecteds}
   end
+  
+  def show_column(column_id)
+    self.feed_accounts.where(:_id => column_id).first
+  end
 
   def has_email?
     !self.email_work.blank? && self.access_tokens.size < 1
@@ -166,12 +178,6 @@ class User
 
   def not_social_login?
     !(self.access_tokens.count < 1)
-  end
-  
-  def focuses_by_category
-    categories = ProfileCategory.all
-    focuses = categories.map{|c| [c.title, self.profiles.find_all_by_profile_category_id(c.id).map(&:title).join(',')]}
-    return focuses
   end
   
   def check_profiles(pids)

@@ -24,5 +24,29 @@ describe FeedApi do
   it "should give nil value when auth by google if there's not a record" do
     FeedApi.auth_by("gmail").should be_nil
   end
+  
+  it "shoud return true if isLinkedin? is called" do
+    api = FactoryGirl.create(:linkedin_feed_api)
+    api.isLinkedin?.should_not be nil
+    api.isLinkedin?.should be_an_instance_of(Fixnum)
+  end
+  
+  it "shoud return true if isFacebook? is called" do
+    api = FactoryGirl.create(:facebook_feed_api)
+    api.isFacebook?.should_not be nil
+    api.isFacebook?.should be_an_instance_of(Fixnum)
+  end
+  
+  it "shoud return true if isTwitter? is called" do
+    api = FactoryGirl.create(:twitter_feed_api)
+    api.isTwitter?.should_not be nil
+    api.isTwitter?.should be_an_instance_of(Fixnum)
+  end
+  
+  it "shoud return true if isGoogle? is called" do
+    api = FactoryGirl.create(:google_feed_api)
+    api.isGoogle?.should_not be nil
+    api.isGoogle?.should be_an_instance_of(Fixnum)
+  end
 
 end
