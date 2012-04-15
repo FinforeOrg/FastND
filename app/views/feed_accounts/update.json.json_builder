@@ -24,7 +24,7 @@ user_feeds @column.user_feeds do |uf|
 		address fi.address
 		category fi.category
 		follower fi.follower
-		if fi.price_tickers.count > 0
+		if fi.price_tickers.present?
 			price_tickers fi.price_tickers do |pt|
 				_id pt.id
 				ticker pt.ticker

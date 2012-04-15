@@ -18,7 +18,7 @@ describe UserFeedsController do
 
 	def valid_column_attributes
 		[
-			{:title => "RSS Column", :category => "rss", 
+			{:name => "RSS Column", :category => "rss", 
 				:user_feeds_attributes => [
 					{:title => "Rss URL 1", 
 					 :feed_info_attributes => {

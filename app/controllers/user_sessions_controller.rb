@@ -3,6 +3,7 @@ class UserSessionsController < ApplicationController
   
   skip_before_filter :require_user,         :except => [:destroy]
   before_filter      :destroy_user_session, :only   => [:create]
+  before_filter      :prepare_callback,     :only   => [:network_sign_in]
 
   caches_action :public_login, :cache_path => Proc.new { |c| c.params }  
   
@@ -24,48 +25,25 @@ class UserSessionsController < ApplicationController
     end
   end
 
-  def network_sign_in
-	  session['social_login'] ||= {}
-	  auth_url = prepared_authorize_url
-    
-    params[:format] = "html"
-    
-    respond_to do |format|
-      if auth_url.blank?
-        format.html {render :text=> get_failed_message}
-      else
-        format.html {redirect_to auth_url}
-      end
-    end
+	def network_sign_in
+  	params[:format] = "html"
+  	respond_to do |format|
+  		format.html {redirect_to authorize_url}
+  	end
 
-    rescue => e
-      accident_alert(e.to_s)
+  	rescue => e
+  		accident_alert(e.to_s)
   end
 
-  def create_network
-    social_login = session['social_login']
-    @cat = params[:cat]
-    includes = []
-    destroy_user_session
-    
-    if !@cat.blank? && !social_login.blank?
-      stored_data = social_login[@cat]
-      if !stored_data.blank?
-        api = FeedApi.auth_by(stored_data[:category])
+	def create_network
+  	@cat = params[:cat]
+  	if @cat.present? && session[@cat].present?
+  		@stored_data = session[@cat]
+  		access_token = get_network_access
 
-        unless api.isFacebook?
-          request_token = OAuth::RequestToken.new(get_consumer(api),stored_data[:rt],stored_data[:rs])
-          access_token = request_token.get_access_token(:oauth_verifier => params[:oauth_verifier])
-        else
-          get_callback_login
-          access_token = FGraph.oauth_access_token(api.api, api.secret, :code=>params[:code], :redirect_uri => @callback_url)
-          access_token = OpenStruct.new access_token
-        end
-
-        profile = get_profile_network(access_token,api,stored_data)
-	
-	      user = User.by_username(profile['username'])
-        access_token_attr = access_token_object(profile, access_token)
+  		profile = OauthMedia.profile_network(access_token, @api.category)
+  		user = User.by_username(profile['username'])
+  		access_token_attr = access_token_object(profile, access_token)
 
         if user.blank?
           password = random_characters
@@ -96,21 +74,21 @@ class UserSessionsController < ApplicationController
 				    user.update_attributes({:user_feed_accounts_attributes => prepared_feed_accounts_attributes(access_token_attr)})
 				  end
         end
-	
-        session['social_login'].delete(@cat) if user && session['social_login']
-        current_user
+        
+        if destroy_user_session && user
+        	new_current_user(user)
+        	param_auth = "auth_token=#{user.single_access_token}&auth_secret=#{user.persistence_token}&user_id=#{user.id}"
+        	param_auth = param_auth + (user.user_profiles.length < 1 ? "&update_profile=true" : "&update_profile=false")
+        	redirect_uri = @stored_data[:callback] + ((@stored_data[:callback].scan(/\?/i).size > 0) ? "&" : "?") + param_auth
+        end
       end
-    end
 
     respond_to do |format|
       if user.blank?
         accident_alert("Your session is terminated, please go back to your refference url (#{request.env['HTTP_REFERER']})")
-      elsif stored_data[:callback].blank?
+      elsif @stored_data[:callback].blank?
         respond_to_do(format, user)
       else
-		    param_auth = "auth_token=#{user.single_access_token}&auth_secret=#{user.persistence_token}&user_id=#{user.id}"
-		    param_auth = param_auth + (user.user_profiles.length < 1 ? "&update_profile=true" : "&update_profile=false")
-		    redirect_uri = stored_data[:callback] + ((stored_data[:callback].scan(/\?/i).size > 0) ? "&" : "?") + param_auth
 		    format.html {redirect_to redirect_uri}
       end
     end
@@ -130,7 +108,7 @@ class UserSessionsController < ApplicationController
 	  end
     
     if result[:user].present?
-     destroy_user_session
+     destroy_user_session and new_current_user(result[:user])
      
      @user_session = UserSession.new(result[:user])
      @user_session.save
@@ -166,6 +144,11 @@ class UserSessionsController < ApplicationController
   end
 
   private
+  
+    def new_current_user(user)
+    	@current_user_session = UserSession.new(user)
+    	@current_user_session.save
+    end
 
     def access_token_object(profile, access_token)
       token  = profile['provider'] != "facebook" ? access_token.token : access_token.access_token
@@ -173,26 +156,27 @@ class UserSessionsController < ApplicationController
       return {:category => profile['provider'], :username => profile['username'], :token => token, :secret => secret}
     end
 	
-	def column_attribute(feed_token_attr,category)
-	  {:category              => category,
-       :window_type           => "tab",
-	   :name                  => category,
-	   :feed_token_attributes => feed_token_attr}
-	end
-	
-	def prepared_feed_accounts_attributes(token_attr)
-	  attributes = []
-	  feed_token_attr = {:token => token_attr[:token], :secret => token_attr[:secret], :username => token_attr[:username]}
-	  categories = token_attr[:category].match(/google/i) ? ["gmail","portfolio"] : [token_attr[:category]]
-	  categories.each do |category|
-		attributes.push( column_attribute(feed_token_attr, category) )
-	  end
-	  return attributes
-	end
+		def column_attribute(feed_token_attr,category)
+		  {:category              => category,
+	       :window_type           => "tab",
+		   :name                  => category,
+		   :feed_token_attributes => feed_token_attr}
+		end
+		
+		def prepared_feed_accounts_attributes(token_attr)
+		  attributes = []
+		  feed_token_attr = {:token => token_attr[:token], :secret => token_attr[:secret], :username => token_attr[:username]}
+		  categories = token_attr[:category].match(/google/i) ? ["gmail","portfolio"] : [token_attr[:category]]
+		  categories.each do |category|
+			attributes.push( column_attribute(feed_token_attr, category) )
+		  end
+		  return attributes
+		end
 
     def destroy_user_session
       current_user_session.destroy unless current_user_session.blank?
       reset_session
+      return true
     end
 
     def credential_information

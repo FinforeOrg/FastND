@@ -17,11 +17,11 @@ describe FeedAccountsController do
 	end
 	
 	def column_parameter
-		{:feed_account => {:title => "RSS Column", :category => "rss", 
+		{:feed_account => {:name => "RSS Column", :category => "rss", 
 			:user_feeds_attributes => [
 				{:title => "Custom Rss", 
 				 :feed_info_attributes => {
-					 :title => "Custom Feed 1",
+					 :name => "Custom Feed 1",
 					 :address => "http://rss.customdomain.org/feed_1.rss",
 					 :category => "rss"
 				 } 
@@ -32,43 +32,43 @@ describe FeedAccountsController do
 
 	def valid_column_attributes
 		[
-			{:title => "RSS Column", :category => "rss", 
+			{:name => "RSS Column", :category => "rss", 
 				:user_feeds_attributes => [
 					{:title => "Rss URL 1", 
 					 :feed_info_attributes => {
-						 :title => "Rss URL 1",
+						 :name => "Rss URL 1",
 						 :address => "http://rss.domain.info/url_1.rss",
 						 :category => "rss"
 					 } 
 					},
 					{:title => "Rss URL 2", 
 					 :feed_info_attributes => {
-						 :title => "Rss URL 2",
+						 :name => "Rss URL 2",
 						 :address => "http://rss.domain.info/url_2.rss",
 						 :category => "rss"
 					 } 
 					},
 				]
 			},
-			{:title => "PODCAST Column", :category => "podcast",
+			{:name => "PODCAST Column", :category => "podcast",
 				:user_feeds_attributes => [
 					{:title => "Podcast 1", 
 					 :feed_info_attributes => {
-						 :title => "Podcast 1",
+						 :name => "Podcast 1",
 						 :address => "http://podcast.domain.info/podcurl_1.rss",
 						 :category => "podcast"
 					 } 
 					},
-					{:title => "Podcast 2", 
+					{:tilte => "Podcast 2", 
 					 :feed_info_attributes => {
-						 :title => "Podcast 2",
+						 :name => "Podcast 2",
 						 :address => "http://podcast.domain.info/podcurl_2.rss",
 						 :category => "podcast"
 					 } 
 					}
 				]
 			},
-			{:title => "KEYWORD Column", :category => "keyword", 
+			{:name => "KEYWORD Column", :category => "keyword", 
 				:keyword_column_attributes => {
 					:keyword => "lorem, ipsum, dolor, cit",
 					:is_aggregate => true,
@@ -141,27 +141,27 @@ describe FeedAccountsController do
 		it "assigns update column" do
 			create_user!
 			column = @user.feed_accounts.last
-			xhr :put, :update, auth_params(@user).merge!({:id => column.id.to_s, :feed_account => {:_id => column.id.to_s, :title => "foo" }})
+			xhr :put, :update, auth_params(@user).merge!({:id => column.id.to_s, :feed_account => {:_id => column.id.to_s, :name => "foo" }})
 			assigns(:column).should have(0).errors
-			assigns(:column).title.should == "foo"
+			assigns(:column).name.should == "foo"
 		end
 		it "assigns update column & create feed" do
 			create_user!
 			column = @user.feed_accounts.first
 			opts = {:feed_account => {
 				        :_id => column.id.to_s, 
-				        :title => "foo", 
+				        :name => "foo", 
 				        :user_feeds_attributes => [
-				        	{:title => "Podcast 1", 
+				        	{:name => "Podcast 1", 
 				        	 :feed_info_attributes => {
-				        		 :title => "Podcast 1",
+				        		 :name => "Podcast 1",
 				        		 :address => "http://podcast.domain.info/podcurl_1.rss",
 				        		 :category => "rss"
 				        	 } 
 				        	},
-				        	{:title => "Podcast 2", 
+				        	{:name => "Podcast 2", 
 				        	 :feed_info_attributes => {
-				        		 :title => "Podcast 2",
+				        		 :name => "Podcast 2",
 				        		 :address => "http://podcast.domain.info/podcurl_2.rss",
 				        		 :category => "rss"
 				        	 } 
@@ -171,9 +171,9 @@ describe FeedAccountsController do
 			       }
 			xhr :put, :update, auth_params(@user).merge!(opts)
 			assigns(:column).should have(0).errors
-			assigns(:column).title.should == "foo"
+			assigns(:column).name.should == "foo"
 			assigns(:column).should have(4).user_feeds
-			assigns(:column).user_feeds.last.title.should == "Podcast 2"
+			assigns(:column).user_feeds.last.name.should == "Podcast 2"
 		end
 	end
 	

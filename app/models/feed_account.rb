@@ -54,6 +54,10 @@ class FeedAccount
   validates :name,     :presence => true
   validates :user_id,  :presence => true
   
+  def self.owned_by(opts)
+    self.includes([:user_feeds]).where(opts)
+  end
+  
   def create_keyword_column(opts={})
     if opts.keyword.blank?
       self.errors.add(:keyword_column, "should not have empty keyword field.")

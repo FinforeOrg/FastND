@@ -50,7 +50,7 @@ user @user do |user|
 				address fi.address
 				category fi.category
 				follower fi.follower.to_i
-				if fi.price_tickers.count > 0
+				if fi.price_tickers.present?
 					price_tickers fi.price_tickers do |pt|
 						_id pt.id
 						ticker pt.ticker

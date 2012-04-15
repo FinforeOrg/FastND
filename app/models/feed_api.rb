@@ -18,5 +18,17 @@ class FeedApi
   def isFacebook?
     self.category =~ /(facebook)/i
   end
+  
+  def isLinkedin?
+    self.category =~ /linkedin/i
+  end
+  
+  def isTwitter?
+    self.category =~ /twitter|tweet/i
+  end
+  
+  def isGoogle?
+    self.category =~ /google|gmail|portfolio/i
+  end
 
 end

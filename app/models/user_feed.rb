@@ -38,43 +38,12 @@ class UserFeed
     @feed_info_attributes
   end
   
-  def as_json(options={})
-    if options.blank?
-      options = {:include => [:feed_info], :except => [:feed_info_id]}
-    end
-    super(options)
-  end
-
   def before_destroy
     self.feed_info.inc(:follower, -1) if self.feed_info
   end
   
   def after_create
     self.feed_info.inc(:follower, 1)
-  end
-  
-  def isSuggestion?
-    self.category_type =~ /(tweet|twitter|suggested)/i
-  end
-
-  def isRss?
-    self.category_type =~ /(rss)/i
-  end
-
-  def isPodcast?
-    self.category_type =~ /(podcast|video|audio)/i
-  end
-
-  def isChart?
-    self.category_type =~ /(price|chart)/i
-  end
-
-  def isCompany?
-    self.category_type =~ /(company|index|currency)/i
-  end
-
-  def isKeyword?
-    self.category_type =~ /(keyword)/i
   end
   
   def feedinfo
