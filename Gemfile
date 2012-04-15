@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.2.3'
+gem 'rails', '3.2.2'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
@@ -99,4 +99,5 @@ group :development do
   gem 'awesome_print'
   gem 'letter_opener'
 end
+
 
