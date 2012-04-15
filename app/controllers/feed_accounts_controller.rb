@@ -93,7 +93,7 @@ class FeedAccountsController < ApplicationController
 		end
 
     def create_column_and_token(access_token, api, user)
-      profile = get_profile_network(access_token,api,@stored_data)
+      profile = OauthMedia.profile_network(access_token,api.category)
 
       if @stored_data[:category].match(/google/) && @stored_data[:column_id].blank?
         categories = ["gmail","portfolio"]

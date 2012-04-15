@@ -5,7 +5,7 @@ module OauthMedia
 	end
 	
 	def self.oauth_access_token(token, request_token="", request_secret="",verifier="")
-		OAuth::RequestToken.new(consumer(token), request_token, request_secret).get_access_token(verifier)
+		OAuth::RequestToken.new(consumer(token), request_token, request_secret).get_access_token(:oauth_verifier => verifier)
 	end
 	
 	def self.access_token(api,opts={})

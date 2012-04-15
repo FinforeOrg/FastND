@@ -27,7 +27,6 @@ class UserSessionsController < ApplicationController
 
 	def network_sign_in
   	params[:format] = "html"
-
   	respond_to do |format|
   		format.html {redirect_to authorize_url}
   	end
@@ -87,7 +86,7 @@ class UserSessionsController < ApplicationController
     respond_to do |format|
       if user.blank?
         accident_alert("Your session is terminated, please go back to your refference url (#{request.env['HTTP_REFERER']})")
-      elsif stored_data[:callback].blank?
+      elsif @stored_data[:callback].blank?
         respond_to_do(format, user)
       else
 		    format.html {redirect_to redirect_uri}
@@ -109,7 +108,7 @@ class UserSessionsController < ApplicationController
 	  end
     
     if result[:user].present?
-     destroy_user_session and new_current_user(user)
+     destroy_user_session and new_current_user(result[:user])
      
      @user_session = UserSession.new(result[:user])
      @user_session.save

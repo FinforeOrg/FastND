@@ -9,7 +9,6 @@ module Finforenet
 			private
 			
 			  def authorize_url
-				  session[@cat] ||= {}
 					if @api
 					  session[@cat].merge!({:column_id => params[:feed_account_id]}) if has_column_id?
 					  session[@cat].merge!({:rt => '', :rs => '', :category => @api.category, :callback => params[:callback]})
@@ -42,13 +41,15 @@ module Finforenet
 			  def prepare_callback
 				  @api = FeedApi.auth_by(params[:provider])
 				  @cat = random_characters if @cat.blank?
+				  session[@cat] ||= {} if session[@cat].blank?
 				  params.merge!({:host => request.host, :security => @cat})
 				  @callback_url = OauthMedia.oauth_callback(current_user, params)
 				end
 			  
 			  def get_network_access
 			  	@api = FeedApi.auth_by(@stored_data[:category]) unless @api
-			  	return OauthMedia.access_token(@api,params.merge({:rt => session[@cat][:rt], :rs => session[@cat][:rs]}))
+			  	params.merge!({:rt => session[@cat][:rt], :rs => session[@cat][:rs]})
+			  	return OauthMedia.access_token(@api,params)
 			  end
 
 			  def get_failed_message
