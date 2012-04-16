@@ -8,14 +8,18 @@
     <p>FastND has new great member please support him/her to get great information, here is your new user information:</p>
        Name     : <%= @user.full_name %><br />
        Email    : <%= @user.login %><br />
+       <% if @user.user_profiles.present? %>
        Profiles : <br/>
-       <ul>
-       <% @user.user_profiles.each do |up| %>
-         <li><%= up.profile.profile_category.title %> : <%= up.profile.title %></li>
+         <ul>
+           <% @user.user_profiles.each do |up| %>
+             <% if up.profile.present? %>
+               <li><%= up.profile.profile_category.title %> : <%= up.profile.title %></li>
+             <% end %>
+           <% end %>
+         </ul>
        <% end %>
-       </ul>
      <p>Best Regards,</p>
      <p>FastND Support</p>
   </body>
  </html>
-  
+
