@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  skip_filter :require_user, :only => [:new, :create, :forgot_password, :profiles]
+  skip_filter :require_user, :only => [:new, :create, :forgot_password, :profiles, :contact_admin]
   before_filter :prepare_user, :only => [:show, :create, :update]
   caches_action :profiles
   
@@ -67,9 +67,13 @@ class UsersController < ApplicationController
     #if !Akismetor.spam?(akismet_attributes(params[:form]))
     #  Resque.enqueue(Finfores::Backgrounds::EmailAlert,"contact_admin", params[:form].to_yaml)     
       status = "SUCCESS"     
-      UserMailer.contact(params[:form]).deliver
+      UserMailer.user_speak(params[:form]).deliver
     #end
-    api_responds({:status => status})
+    respond_to do |format|
+	    format.html {render :text => status}
+	    format.json {render :json => {:status => "SUCCESS"}}
+	    format.xml  {render :xml => {:status => "SUCCESS"}}
+	  end
   end
 
   private

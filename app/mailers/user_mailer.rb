@@ -4,8 +4,8 @@ class UserMailer < ActionMailer::Base
   def welcome_email(user,password)
     @user = user
     @password = password
-    mail(:subject => "FASTND.COM - Welcome to FastND", :from => user.login)
-    new_user_to_admin(user,password)
+    mail(:subject => "FASTND.COM - Welcome to FastND", :to => user.login, :from => "info@fastnd.com")
+    UserMailer.new_user_to_admin(user,password).deliver
    end
 
    def new_user_to_admin(user,password="")
@@ -17,12 +17,12 @@ class UserMailer < ActionMailer::Base
    def contact(options)
      @options = options.merge!({:sent_on => Time.now})
      mail(:subject => @options[:subject], :to => @options[:email], :from => "info@fastnd.com")
-     user_speak(options)
    end
 
    def user_speak(options)
      @options = options.merge!({:sent_on => Time.now})
      mail(:subject => @options[:subject], :from => @options[:email], :to => "info@fastnd.com")
+     UserMailer.contact(options).deliver
    end
    
    def missing_suggestions(user,category)
@@ -33,7 +33,7 @@ class UserMailer < ActionMailer::Base
    end
 
    def forgot_password(user,new_password)
-     @login_email = user.login
+     @login_email = user.email_work
      @password = new_password
      @sent_on = Time.now
      @full_name = user.full_name

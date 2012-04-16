@@ -4,7 +4,7 @@ FinforeWeb::Application.routes.draw do
     collection do
       get :forgot_password
       get :profiles
-      get :contact_admin
+      post :contact_admin
     end
   end
   resources :user_sessions do
