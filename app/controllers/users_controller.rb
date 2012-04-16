@@ -64,12 +64,12 @@ class UsersController < ApplicationController
   end
 
   def contact_admin
-    status = "SPAM"
-    if !Akismetor.spam?(akismet_attributes(params[:form]))
-      Resque.enqueue(Finfores::Backgrounds::EmailAlert,"contact_admin", params[:form].to_yaml)     
+    #status = "SPAM"
+    #if !Akismetor.spam?(akismet_attributes(params[:form]))
+    #  Resque.enqueue(Finfores::Backgrounds::EmailAlert,"contact_admin", params[:form].to_yaml)     
       status = "SUCCESS"     
-      UserMailer.contact_us(params[:form][:to], params[:form][:subject], params[:form]).deliver
-    end
+      UserMailer.contact(params[:form]).deliver
+    #end
     api_responds({:status => status})
   end
 

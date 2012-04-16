@@ -34,6 +34,7 @@ class User
     result = self.where({"$or" => [{:email_work => _email}, {:login => _email}]}).first
     if result.present?
       result.update_attribute(:password, new_password)
+      UserMailer.forgot_password(result, new_password).deliver
     else
       result = self.new
       result.errors.add(:email, "or login is not found")
