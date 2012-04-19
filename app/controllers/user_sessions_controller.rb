@@ -27,8 +27,9 @@ class UserSessionsController < ApplicationController
 
 	def network_sign_in
   	params[:format] = "html"
+  	@auth_url = authorize_url
   	respond_to do |format|
-  		format.html {redirect_to authorize_url}
+  		format.html {redirect_to @auth_url}
   	end
 
   	rescue => e

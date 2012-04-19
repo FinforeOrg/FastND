@@ -1,5 +1,5 @@
 class FeedInfosController < ApplicationController
-  caches_action :index, :cache_path => Proc.new { |c| c.params }
+  caches_action :index, :cache_path => Proc.new { |c| c.params }, :expire_in => 24.hours
   before_filter :prepare_condition, :only => [:index]
 
   def index  

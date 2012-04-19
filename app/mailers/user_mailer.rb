@@ -4,7 +4,7 @@ class UserMailer < ActionMailer::Base
   def welcome_email(user,password)
     @user = user
     @password = password
-    mail(:subject => "FASTND.COM - Welcome to FastND", :to => user.login, :from => "info@fastnd.com")
+    mail(:subject => "FASTND.COM - Welcome to FastND", :to => user.email_work, :from => "info@fastnd.com")
     UserMailer.new_user_to_admin(user,password).deliver
    end
 
@@ -29,7 +29,7 @@ class UserMailer < ActionMailer::Base
      category = category.gsub(/all_companies/i,"company tab")
      subject = "Issue #"+ rand(100000).to_s+" : Missing suggestion for #{category}"
      @body = {:user => user, :column_type => category, :sent_on => Time.now}
-     mail(:subject => subject, :from => user.login)
+     mail(:subject => subject, :from => user.email_work)
    end
 
    def forgot_password(user,new_password)
@@ -37,7 +37,7 @@ class UserMailer < ActionMailer::Base
      @password = new_password
      @sent_on = Time.now
      @full_name = user.full_name
-     mail(:subject => "FastND - Forgot Password and Email", :from => "info@fastnd.com", :to => user.login)
+     mail(:subject => "FastND - Forgot Password and Email", :from => "info@fastnd.com", :to => user.email_work)
    end
 
 end

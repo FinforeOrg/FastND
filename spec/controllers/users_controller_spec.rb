@@ -127,5 +127,20 @@ describe UsersController do
 			assigns(:user).should eq(user)
 		end
 	end
+	
+	describe "POST contact_admin" do
+		it "sends messages from user to admin" do
+			user = User.create! valid_attributes
+			xhr :post, :contact_admin, 
+					{:form => {
+											:name => "John Doe", 
+											:email => "john@doe.net", 
+											:subject => "Hello..", 
+											:messages => "Enter your text here..."
+										}, 
+					:format => "json"}
+			response.status.should be 200
+		end
+	end
 
 end
