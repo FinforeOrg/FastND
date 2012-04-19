@@ -14,6 +14,7 @@ class UsersController < ApplicationController
   # POST /users.xml
   # POST /users.json 
   def create
+	  params[:user][:login] = params[:user][:email_work] if params[:user][:login].blank?
     user = params[:user]
     @user = User.create(user)
     @user.valid? ? after_save(user) : error_responds(@user)
@@ -42,6 +43,7 @@ class UsersController < ApplicationController
   #  }
   def update
     access_denied unless is_owner?
+    params[:user][:login] = params[:user][:email_work] if params[:user][:login].blank?
     user = params[:user]    
     is_new = @user.feed_accounts.count < 1 && !user[:password].blank?
     @user.is_exist(user[:email_work]) if user[:email_work].present? && is_new
