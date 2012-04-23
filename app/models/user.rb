@@ -33,7 +33,7 @@ class User
   def self.forgot_password(_email, new_password)
     result = self.where({"$or" => [{:email_work => _email}, {:login => _email}]}).first
     if result.present?
-      result.update_attribute(:password, new_password)
+      result.update_attributes({:password => new_password,:password_confirmation => new_password})
       UserMailer.forgot_password(result, new_password).deliver
     else
       result = self.new
