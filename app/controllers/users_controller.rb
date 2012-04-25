@@ -55,7 +55,7 @@ class UsersController < ApplicationController
   end
 
   def forgot_password
-    @user = User.forgot_password(params[:email], random_characters)
+    @user = User.forgot_password(params[:email])
     @user.errors.count < 1 ?  api_responds(@user) : error_responds(@user)
   end
 

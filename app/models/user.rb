@@ -23,6 +23,7 @@ class User
   has_many :user_profiles,     :dependent => :destroy, :autosave => true, :class_name => "User::Profile"
 
   attr_accessor :selected_profiles, :profile_ids
+  before_validation :check_login
   accepts_nested_attributes_for :access_tokens, :feed_accounts, :user_company_tabs, :user_profiles
 
   validates_format_of :email_work, 
@@ -30,11 +31,12 @@ class User
                       :message => "is invalid", 
                       :if => :has_email?
   
-  def self.forgot_password(_email, new_password)
+  def self.forgot_password(_email)
     result = self.where({"$or" => [{:email_work => _email}, {:login => _email}]}).first
     if result.present?
-      result.update_attributes({:password => new_password,:password_confirmation => new_password})
-      UserMailer.forgot_password(result, new_password).deliver
+      result.reset_password
+      result.save
+      UserMailer.forgot_password(result, result.password).deliver
     else
       result = self.new
       result.errors.add(:email, "or login is not found")
@@ -188,6 +190,11 @@ class User
         User::Profile.create({:profile_id => pid, :user_id => self.id})
       end
     end
+  end
+  
+  def check_login
+    self.login = self.email_work if self.login.blank?
+    self.email_work = self.login if self.email_work.blank?
   end
 
 end
