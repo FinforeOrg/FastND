@@ -18,7 +18,7 @@ module Finforenet
 							session[@cat].merge!({:rt => request_token.token, :rs => request_token.secret})
 							auth_url = request_token.authorize_url({:force_login => 'false'})
 					  else
-						  session[@cat].merge!{:fb_callback => @callback_url}
+						  session[@cat].merge!({:fb_callback => @callback_url})
 						  auth_url = FGraph.oauth_authorize_url(@api.api, @callback_url, :scope=> OauthMedia.fb_permissions)
 					  end
 					end
