@@ -12,13 +12,13 @@ module OauthMedia
 		unless api.isFacebook?
 			access_token = self.oauth_access_token(api,opts[:rt],opts[:rs], opts[:oauth_verifier])
 		else
-			access_token = FGraph.oauth_access_token(api.api, api.secret, fb_access_opts(opts))
+			access_token = FGraph.oauth_access_token(api.api, api.secret, self.fb_access_opts(opts))
 			access_token = OpenStruct.new access_token
 		end
 	end
 	
 	def self.fb_access_opts(opts={})
-		{:code=>opts[:code], :redirect_uri => @callback_url}
+		{:code=>opts[:code], :redirect_uri => opts[:fb_callback]}
 	end
 	
 	def self.oauth_callback(user, opts={})

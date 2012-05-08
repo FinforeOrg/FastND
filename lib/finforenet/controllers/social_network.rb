@@ -18,6 +18,7 @@ module Finforenet
 							session[@cat].merge!({:rt => request_token.token, :rs => request_token.secret})
 							auth_url = request_token.authorize_url({:force_login => 'false'})
 					  else
+						  session[@cat].merge!{:fb_callback => @callback_url}
 						  auth_url = FGraph.oauth_authorize_url(@api.api, @callback_url, :scope=> OauthMedia.fb_permissions)
 					  end
 					end
@@ -49,6 +50,7 @@ module Finforenet
 			  def get_network_access
 			  	@api = FeedApi.auth_by(@stored_data[:category]) unless @api
 			  	params.merge!({:rt => session[@cat][:rt], :rs => session[@cat][:rs]})
+			  	params.merge!({:fb_callback => session[@cat][:fb_callback]}) if @api.is_facebook?
 			  	return OauthMedia.access_token(@api,params)
 			  end
 
