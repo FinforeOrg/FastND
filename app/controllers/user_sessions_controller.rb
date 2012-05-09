@@ -76,7 +76,7 @@ class UserSessionsController < ApplicationController
 				  end
         end
         
-        if destroy_user_session && user
+        if destroy_user_session && user && @stored_data[:callback].present?
         	new_current_user(user)
         	param_auth = "auth_token=#{user.single_access_token}&auth_secret=#{user.persistence_token}&user_id=#{user.id}"
         	param_auth = param_auth + (user.user_profiles.length < 1 ? "&update_profile=true" : "&update_profile=false")

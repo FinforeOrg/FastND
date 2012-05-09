@@ -50,7 +50,7 @@ module Finforenet
 			  def get_network_access
 			  	@api = FeedApi.auth_by(@stored_data[:category]) unless @api
 			  	params.merge!({:rt => session[@cat][:rt], :rs => session[@cat][:rs]})
-			  	params.merge!({:fb_callback => session[@cat][:fb_callback]}) if @api.is_facebook?
+			  	params.merge!({:fb_callback => session[@cat][:fb_callback]}) if @api.isFacebook?
 			  	return OauthMedia.access_token(@api,params)
 			  end
 
