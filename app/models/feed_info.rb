@@ -49,6 +49,16 @@ class FeedInfo < Base::FeedInfo
     self.where(:title => /(DJ Indus)|(Equity Indi)/i)
   end
 
+  def validate_rss
+    return true unless self.isRss?
+    result = HTTParty.get(self.address)
+    result.headers['content-type'] =~ /xml|rss|atom/i
+  end
+
+  def email_invalid_rss
+    UserMailer.invalid_rss(self).deliver
+  end
+
   def isSuggestion?
     self.category =~ /(tweet|twitter|suggest)/i
   end

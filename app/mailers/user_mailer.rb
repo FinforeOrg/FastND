@@ -14,6 +14,11 @@ class UserMailer < ActionMailer::Base
      mail(:subject => "FastND - New Member", :from => "info@fastnd.com")
    end
 
+   def invalid_rss(feed_info)
+     @feed_info = feed_info
+     mail(:subject => "Invalid RSS #{feed_info.title}", :from => "info@fastnd.com")
+   end
+
    def contact(options)
      @options = options.merge!({:sent_on => Time.now})
      mail(:subject => @options[:subject], :to => @options[:email], :from => "info@fastnd.com")
