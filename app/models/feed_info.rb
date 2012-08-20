@@ -1,5 +1,7 @@
 class FeedInfo < Base::FeedInfo  
   field :is_populate, :type => Boolean, :default => false
+  field :position,    :type => Integer
+  index :position
   index :is_populate
 
   validates :title,    :presence => true
@@ -22,7 +24,7 @@ class FeedInfo < Base::FeedInfo
   end
 
   def self.all_sort_title(conditions)
-    return self.includes(:price_tickers).where(conditions).asc(:title)
+    return self.includes(:price_tickers).where(conditions).order_by([:position, :asc], [:title, :asc])
   end
 
   #TODO : Tear down this method if not used yet

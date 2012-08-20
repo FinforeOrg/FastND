@@ -19,16 +19,16 @@ class FeedInfosController < ApplicationController
     end
 
     def profileable?
-      current_user && !@show_all && !is_chart
+      current_user && !@show_all #&& !is_chart
     end
 
     def prepare_list_for_user
-      if !is_chart_or_all_companies && !@show_all
+      if !is_all_companies && !@show_all
         @feed_infos = FeedInfo.filter_feeds_data(@conditions,(params[:per_page]||25), params[:page]||1)
         #@paginateable = true
       elsif is_all_companies
          @feed_infos = CompanyCompetitor.all.map(&:feed_info)
-      elsif is_chart || @show_all
+      elsif @show_all
         @feed_infos = FeedInfo.all_sort_title(@conditions)
         #@paginateable = true if @show_all
       end
