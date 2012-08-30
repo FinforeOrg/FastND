@@ -1,17 +1,10 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.2.1'
-# Bundle edge Rails instead:
-# gem 'rails',     :git => 'git://github.com/rails/rails.git'
+gem 'rails', '3.2.3'
 
-
-gem 'json'
-
-# Gems used only for assets and not required
-# in production environments by default.
 group :assets do
-  gem 'sass-rails',   '~> 3.2.1'
-  gem 'coffee-rails', '~> 3.2.1'
+  gem 'sass-rails',   '~> 3.2.3'
+  gem 'coffee-rails', '~> 3.2.2'
   gem 'uglifier', '>= 1.0.3'
 end
 
@@ -21,48 +14,75 @@ gem 'elif'
 gem 'request-log-analyzer'
 gem 'oink'
 
+# Cross Support
 gem 'rack-cors', :require => 'rack/cors', :path => "./vendor/gems/rack-cors"
-gem 'gmoney', :path => "./vendor/gems/gmoney"
-gem 'gmail_xoauth', :path => "./vendor/gems/gmail_xoauth"
 gem 'crack'
-gem 'execjs'
-gem 'therubyracer'
+
+#Database
+gem 'mongoid', '2.4.7'
+gem 'railroady', :path => "./vendor/gems/railroady"
+
+# Data Support Builders
 gem 'xml-simple'
-gem 'mongoid', '2.4.5'
 gem 'bson_ext'
+gem 'json'
+gem 'json_builder'
 gem 'jquery-rails'
-gem 'htmlentities'
+gem 'yajl-ruby'
+gem 'nokogiri', '>= 1.5.0'
+gem 'profanity_filter'
+
+# Background Job & Queue
 gem 'resque'
 gem 'redis'
 gem 'redis-namespace'
 gem 'redis-store'
+
+# CSV File Handler
 gem 'fastercsv'
+
+# Oauth Authentication
 gem 'oauth'
 gem 'oauth2'
-gem 'yajl-ruby'
-gem 'authlogic'
 gem 'twitter_oauth'
-gem 'httparty'
+gem 'gmail_xoauth', :path => "./vendor/gems/gmail_xoauth"
+
+# User Authentication
+gem 'authlogic'
+
+# Social Networking
+gem 'gmoney', :path => "./vendor/gems/gmoney"
 gem 'linkedin'
+#, :git => 'git://github.com/pengwynn/linkedin.git'
 gem 'fgraph'
+
+# Spam Assasin
 gem 'akismetor'
+
+# Notification Alert
 gem 'exception_notification_rails3', :require => 'exception_notifier'
-gem 'profanity_filter'
-gem 'nokogiri'
+
+# Utilities
+gem 'execjs'
 gem 'therubyracer'
+gem 'htmlentities'
+gem 'httparty'
 gem 'kaminari'
+
+# Deployment Requirement
 gem 'capistrano'
 gem 'unicorn'
 gem 'foreman'
 
 group :test do
   gem 'factory_girl_rails'
-  gem 'cucumber-rails'
+  gem 'cucumber-rails', '>= 1.1.1'
   gem 'capybara'
   gem 'database_cleaner'
   gem 'rspec'
   gem 'rspec-rails'
   gem 'shoulda'
+  gem 'fuubar'
   #gem 'rcov'
   gem 'simplecov'
   gem "mongoid-rspec", :path => "./vendor/gems/evansagge-mongoid-rspec-1.4.4-13" 
@@ -80,15 +100,4 @@ group :development do
   gem 'letter_opener'
 end
 
-# To use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.0.0'
-
-# Use unicorn as the web server
-# gem 'unicorn'
-
-# Deploy with Capistrano
-# gem 'capistrano'
-
-# To use debugger
-#gem 'ruby-debug'
 

@@ -1,0 +1,8 @@
+array @categories do |category|
+  _id category.id.to_s
+  title category.title
+  profiles category.profiles do |profile|
+    _id profile.id
+    title profile.title
+  end
+end

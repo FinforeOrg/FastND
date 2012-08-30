@@ -5,13 +5,13 @@ class ProfileCategory
   
   has_many :profiles
 
-  def as_json(options={})
-    
-    if options[:include].blank?
-      options = {:include => {:profiles =>{:only => [:_id,:title]}},
-                 :only    => [:_id,:title]}
-    end
-    
-    super(options)
+  def self.with_public_profile
+    self.includes(:profiles).where(public_opts)
   end
+  
+  private
+    def self.public_opts
+      {"profiles.is_private" => {"$ne" => true}}
+    end
+
 end

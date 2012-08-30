@@ -1,66 +1,20 @@
-class FeedInfo
-  include Mongoid::Document
-  include Finforenet::Models::SharedQuery
-  include Finforenet::Models::Jsonable
-  
-  #Fields
-  field :title,       :type => String 
-  field :address,     :type => String 
-  field :category,    :type => String 
-  field :follower,    :type => Integer, :default => 0 
-  field :image,       :type => String 
-  field :description, :type => String
+class FeedInfo < Base::FeedInfo  
   field :is_populate, :type => Boolean, :default => false
-  #this indicates that feed_info is from user inputs
-  field :is_user,     :type => Boolean, :default => false 
-  
-  index :title
-  index :address
-  index :category
+  field :position,    :type => Integer
+  index :position
   index :is_populate
-  
-  #Associations
-  #Please do not use embeds to relations below, because they're separated collections
-  
-  #has_many :user_feeds,          :dependent => :destroy
-  has_many :populate_feed_infos, :dependent => :destroy
-  has_many :price_tickers,       :dependent => :destroy
-  #has_many :user_company_tabs,   :dependent => :destroy
-  has_one  :company_competitor,  :dependent => :destroy
-  has_and_belongs_to_many :profiles, :index => true
-  
+
   validates :title,    :presence => true
-  validates :address,  :presence => true
-  validates :category, :presence => true
+  #Associations
+  has_many :user_feeds,          :dependent => :destroy
+  has_many :price_tickers,       :dependent => :destroy
+  has_many :user_company_tabs,   :dependent => :destroy
+  has_one  :company_competitor,  :dependent => :destroy
+  has_many :feed_info_profiles,  :dependent => :destroy, :class_name => "FeedInfo::Profile"
 
-  #cache
-  
-  def as_json(options={})
-    if options[:include].blank?
-	  
-      options = {:include => {:price_tickers => {:only => [:ticker]}, 
-	                          :company_competitor => { :except=> [:feed_info_id] }, 
-	                          :profiles => {:only => [:_id,:title],:include  => profile_category_opts}
-	                         }, 
-	             :except => [:profile_ids]
-	            }
-    end
-    super(options)
-  end
-
-  def self.filter_feeds_data(conditions, limit_no, page)
-	feed_infos = self.includes(:profiles) if conditions[:profile_ids]
-	feed_infos = self.where(conditions).asc(:title)
-	#feed_infos = feed_infos.limit(limit_no) unless limit_no.blank?
-	#unless page.blank?
-	#  if page == 1
-	#	offset_no = 0 
-	#  else
-	#	offset_no = page * limit_no
-	#  end
-	#end
-	#feed_infos = feed_infos.offset(offset_no) 
-    return feed_infos
+  def self.filter_feeds_data(conditions, _limit, _page)
+	  feed_infos = self.includes(:feed_info_profiles) if conditions[:_id]
+	  return self.where(conditions).asc(:title)
   end
 
   def self.all_with_competitor(conditions)
@@ -70,9 +24,10 @@ class FeedInfo
   end
 
   def self.all_sort_title(conditions)
-	self.includes(:price_tickers).where(conditions).asc(:title)
+    return self.includes(:price_tickers).where(conditions).order_by([:position, :asc], [:title, :asc])
   end
 
+  #TODO : Tear down this method if not used yet
   def self.search_populates(options,is_company_tab=false)
     feed_infos = self.where(options)
     if is_company_tab
@@ -94,6 +49,16 @@ class FeedInfo
 
   def self.with_populated_prices
     self.where(:title => /(DJ Indus)|(Equity Indi)/i)
+  end
+
+  def validate_rss
+    return true unless self.isRss?
+    result = HTTParty.get(self.address)
+    result.headers['content-type'] =~ /xml|rss|atom/i || result.body =~ /(\s*[<][\?]xml[^>?]+\?>\s)/i
+  end
+
+  def email_invalid_rss
+    UserMailer.invalid_rss(self).deliver
   end
 
   def isSuggestion?

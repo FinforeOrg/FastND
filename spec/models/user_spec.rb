@@ -5,63 +5,65 @@ describe User do
     @user = FactoryGirl.create(:user)
   end
   
-  it { should have_fields(:email_home).of_type(String) }
   it { should have_fields(:email_work).of_type(String) }
   it { should have_fields(:login).of_type(String) }
-  it { should have_fields(:full_name).of_type(String) }
-  it { should have_fields(:is_email_home_primary).of_type(Boolean).with_default_value_of(false) }  
+  it { should have_fields(:full_name).of_type(String) } 
   it { should have_fields(:is_online).of_type(Boolean).with_default_value_of(false) }  
   it { should have_fields(:is_public).of_type(Boolean).with_default_value_of(false) }  
   
-  it { should have_index_for(:email_home) }
   it { should have_index_for(:email_work) }
   it { should have_index_for(:login) }
   it { should have_index_for(:full_name) }
   
-  it { should embed_many(:access_tokens) }
-  it { should embed_many(:feed_accounts) }
-  it { should embed_many(:user_company_tabs) }
+  it { should have_many(:access_tokens) }
+  it { should have_many(:feed_accounts) }
+  it { should have_many(:user_company_tabs) }
+  it { should have_many(:user_profiles) }
   
-  it { should have_and_belong_to_many(:profiles) }
+  it { should have_many(:user_profiles) }
   it { should validate_format_of(:email_work) }
-  
-  it "should show user as json" do
-    @user.as_json.class.should == Hash
-  end
   
   
   it "should accept nested attributes for access_tokens" do
     user = FactoryGirl.build(:user)
     user.access_tokens_attributes = [{:name => "child"}]
-    user.save;
+    user.save
     user.access_tokens.size.should == 1
     user.access_tokens.first.name.should == "child"
   end
   
   it "should accept nested attributes for feed_accounts" do
+    column = {:name => "Tech Podcasts",
+      :window_type => 'tab', 
+      :category  => "podcast"
+    }  
+    @user.feed_accounts_attributes = [column]
+    @user.save
+    @user.feed_accounts.count.should == 1
+    @user.feed_accounts.first.name.should == "Tech Podcasts"
   end
   
   it "should accept nested attributes for user_company_tabs" do
   end
   
   it "should create_column" do
-    token = {:token  => "klnsadzlknsdasdlkmsdfkn", :secret => "bzbnwdkmasdkndknsdfknsdf", :uid => 12345}
+    token = {:token  => "klnsadzlknsdasdlkmsdfkn", :secret => "bzbnwdkmasdkndknsdfknsdf", :username => 12345}
     column = {:name => "Tech Podcasts",
       :window_type => 'tab', 
       :category  => "podcast", 
       :feed_token_attributes => token
     }    
-    @user.create_column(column).should_not be_empty
+    @user.create_column(column).should_not be false
   end  
   
   it "should have column with category portfolio" do
-    token = {:token  => "klnsadzlknsdasdlkmsdfkn", :secret => "bzbnwdkmasdkndknsdfknsdf", :uid => 12345}
+    token = {:token  => "klnsadzlknsdasdlkmsdfkn", :secret => "bzbnwdkmasdkndknsdfknsdf", :username => 12345}
     column = {:name => "Tech Podcasts", 
       :window_type => 'tab', 
       :category  => "portfolio", 
       :feed_token_attributes => token
     }    
-    @user.create_column(column).should_not be_empty
+    @user.create_column(column).should_not be false
   end  
   
   it "should create tab" do
@@ -87,7 +89,7 @@ describe User do
   end
   
   it "should have columns" do
-    token = {:token  => "klnsadzlknsdasdlkmsdfkn", :secret => "bzbnwdkmasdkndknsdfknsdf", :uid => 12345}
+    token = {:token  => "klnsadzlknsdasdlkmsdfkn", :secret => "bzbnwdkmasdkndknsdfknsdf", :username => 12345}
     column = {:name => "Tech Podcasts", 
       :window_type => 'tab', 
       :category  => "podcast", 
@@ -95,7 +97,7 @@ describe User do
     }    
     @user.create_column(column)
     columns = @user.has_columns?
-    columns.should be_true
+    columns.should be true
   end
   
   it "should able find by id" do
@@ -110,9 +112,9 @@ describe User do
     user.should be_nil
   end
   
-  it "should able find by uid" do
+  it "should able find by username" do
     @user.access_tokens << FactoryGirl.build(:access_token)
-    user = User.by_uid("g-C_xaKPQb")
+    user = User.by_username("g-C_xaKPQb")
     user.full_name.should == 'John Doe'
   end
   
@@ -148,7 +150,31 @@ describe User do
     @user.not_social_login?.should be_true
   end
   
-  it "should focuses_by_category" do
+  it "Shoud show column by id" do
+    column = {:name => "Tech Podcasts",
+      :window_type => 'tab', 
+      :category  => "podcast"
+    }    
+    @user.create_column(column).should_not be false
+    account = @user.feed_accounts.first
+    account.should be_an_instance_of(FeedAccount)
+    account.category.should == "podcast"
+    result = @user.show_column(account.id)
+    result.should_not be nil
+    result.should be_an_instance_of(FeedAccount)
+  end
+  
+  it "shoud check profiles" do
+    FactoryGirl.create(:profile_technology)
+    FactoryGirl.create(:profile_asset)
+    FactoryGirl.create(:profile_banking)
+    Profile.count.should be == 3
+    @user.update_attributes({:user_profiles_attributes => [{:profile_id => Profile.first.id}]})
+    @user.user_profiles.count.should == 1
+    @user.should have(0).errors
+    @user.check_profiles(Profile.all.map{|profile| profile.id.to_s})
+    @user.should have(0).errors
+    @user.user_profiles.count.should == 3
   end
   
   

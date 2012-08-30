@@ -4,85 +4,67 @@ class User
   include Finforenet::Models::Authenticable
   include Finforenet::Models::SharedQuery
   include Finforenet::Models::Jsonable
-  
-  field :email_home,            :type => String 
+   
   field :email_work,            :type => String
   field :login,                 :type => String
   field :full_name,             :type => String
-  field :is_email_home_primary, :type => Boolean, :default => false
   field :is_online,             :type => Boolean, :default => false
   field :is_public,             :type => Boolean, :default => false
-  #field :remember_columns,      :type => String
-  #field :remember_companies,    :type => String
 
-  index :email_home
   index :email_work
   index :login
   index :full_name
   
-  # User's authorization is using authlogic
-  # Change this to your preferred login field
-  
-  acts_as_authentic do |auth|  
-    auth.email_field = :email_work
-    auth.ignore_blank_passwords = true if auth.email_field.blank?
-    auth.validate_password_field = false if auth.email_field.blank?
-    auth.validate_email_field = false if auth.email_field.blank?
-    auth.validate_login_field = false if auth.email_field.blank?
-    #auth.login_field = 'username'
-    #auth.merge_validates_uniqueness_of_login_field_options :scope => '_id', :case_sensitive => true
-  end
   
   #Association
-  embeds_many :access_tokens,     :cascade_callbacks => true
-  embeds_many :feed_accounts,     :cascade_callbacks => true, :order => [[ :position, :asc ]]
-  embeds_many :user_company_tabs, :cascade_callbacks => true, :order => [[ :position, :asc ]]
-  has_and_belongs_to_many :profiles, :index => true
+  has_many :access_tokens,     :dependent => :destroy, :autosave => true
+  has_many :feed_accounts,     :dependent => :destroy, :autosave => true, :order => [[ :position, :asc ]]
+  has_many :user_company_tabs, :dependent => :destroy, :autosave => true, :order => [[ :position, :asc ]]
+  has_many :user_profiles,     :dependent => :destroy, :autosave => true, :class_name => "User::Profile"
 
-  attr_accessor :selected_profiles
-  
-  accepts_nested_attributes_for :access_tokens, :feed_accounts, :user_company_tabs
-  
-  #has_many :noticeboard_users
-  #has_many :noticeboard_comments
-  #has_many :noticeboard_posts
-  #has_many :noticeboard_role_users
-  #has_many :user_company_tabs, :dependent => :destroy
-  
-  #validates_uniqueness_of :email_work, :message => "is already taken.", :if => :has_email?
-  #validates_presence_of :profession, :on=>:update, :message => "is required", :if => :has_email?
-  #validates_presence_of :geographic, :on=>:update, :message => "is required", :if => :has_email?
-  #validates_presence_of :industry, :on=>:update, :message => "is required", :if => :has_email?
-  validates_format_of :email_work, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :message => "is invalid", :if => :has_email?
+  attr_accessor :selected_profiles, :profile_ids
+  before_validation :check_login
+  accepts_nested_attributes_for :access_tokens, :feed_accounts, :user_company_tabs, :user_profiles
 
-  def as_json(options={})
-    
-    
-    if options[:include].blank?
-      options = attr_jsonable
+  validates_format_of :email_work, 
+                      :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, 
+                      :message => "is invalid", 
+                      :if => :has_email?
+  
+  def self.forgot_password(_email)
+    result = self.where({"$or" => [{:email_work => _email}, {:login => _email}]}).first
+    if result.present?
+      result.reset_password
+      result.save
+      UserMailer.forgot_password(result, result.password).deliver
+    else
+      result = self.new
+      result.errors.add(:email, "or login is not found")
     end
-    
-    super(options)
+    return result
   end
   
-  def attr_jsonable
-    {:include => {:profiles => {:only => [:_id,:title],:include  => profile_category_opts},
-                                :feed_accounts => user_feeds_opts,
-                                :user_company_tabs => feed_info_competitor
-                 },
-     :except  => user_exceptions}
+  def create_feed_account(opts)
+    if opts[:category].blank?
+      self.errors.add(:column, "category is required")
+    elsif opts[:title].blank?
+      self.errors.add(:column, "title is required")
+    else
+      self.feed_accounts << FeedAccount.new(opts.merge!({:user_id => self.id}))
+      self.save
+    end
   end
   
   def create_column(account)
-	account = FeedAccount.new(account) if account.class.equal?(Hash)
-	account = updated_position(account) unless account.category.match(/portfolio/i)
+	  account = FeedAccount.new(account) if account.class.equal?(Hash)
     self.feed_accounts << account
+    self.save
   end
   
   def create_tab(tab)
-	tab = UserCompanyTab.new(tab) if tab.class.equal?(Hash)
-	tab = updated_position(tab)
+	  tab = UserCompanyTab.new(tab) if tab.class.equal?(Hash)
     self.user_company_tabs << tab
+    self.save
   end
   
   def is_exist(work_email)
@@ -131,14 +113,23 @@ class User
     self.where(:_id => val).first
   end
   
-  def self.by_uid(access_uid)
-    User.includes([:access_tokens]).where({"access_tokens.uid" => access_uid}).first
+  def self.by_username(access_uid)
+    at = AccessToken.where({:username => access_uid}).first
+    at ? at.user : nil
   end
   
   def self.auth_by_security(auth_token, auth_session)
     user = self.where({:single_access_token => auth_token, :perishable_token => auth_session}).first
     user = self.where({:single_access_token => auth_token, :is_public => true}).first if user.blank?
     return user
+  end
+  
+  def self.auth_by_token(params)
+    if params[:auth_secret].blank?
+      self.auth_by_security(params[:auth_token],params[:auth_session])
+    else
+      self.auth_by_persistence(params[:auth_token],params[:auth_secret])
+    end
   end
   
   def self.auth_by_persistence(auth_token, auth_persistence)
@@ -152,14 +143,14 @@ class User
     _remain = []
     _selecteds = []
     _users.each do |_user|
-      _remain = pids - _user.profiles.map{|profile| profile.id.to_s}
+      _remain = pids - _user.user_profiles.map{|up| up.profile_id.to_s}
       if _remain.size < 1
         #_user.profile_ids = pids
         _user.selected_profiles = pids
         _selecteds = pids
         _return = _user
         break
-      elsif _remain.size < _user.profiles.count 
+      elsif _remain.size < _user.user_profiles.count 
         if _garbage.size < 1
           _garbage.push({:user => _user,:remain_size => _remain.size}) 
         else
@@ -179,6 +170,10 @@ class User
     end
     return {:user => _return, :selecteds => _selecteds}
   end
+  
+  def show_column(column_id)
+    self.feed_accounts.where(:_id => column_id).first
+  end
 
   def has_email?
     !self.email_work.blank? && self.access_tokens.size < 1
@@ -188,10 +183,18 @@ class User
     !(self.access_tokens.count < 1)
   end
   
-  def focuses_by_category
-    categories = ProfileCategory.all
-    focuses = categories.map{|c| [c.title, self.profiles.find_all_by_profile_category_id(c.id).map(&:title).join(',')]}
-    return focuses
+  def check_profiles(pids)
+    if pids.is_a?(Array) && pids.present?
+      self.user_profiles.delete_all if self.user_profiles.count > 0
+      pids.each do |pid|
+        User::Profile.create({:profile_id => pid, :user_id => self.id})
+      end
+    end
   end
   
+  def check_login
+    self.login = self.email_work if self.login.blank?
+    self.email_work = self.login if self.email_work.blank?
+  end
+
 end

@@ -1,18 +1,17 @@
 class FeedInfosController < ApplicationController
+  caches_action :index, :cache_path => Proc.new { |c| c.params }
   before_filter :prepare_condition, :only => [:index]
-  caches_action :index, :cache_path => Proc.new { |controller| controller.params }, :expires_in => 4.hours
-  
+
   def index  
     prepare_list_for_user if current_user
-	@feed_infos = Kaminari.paginate_array(@feed_infos).page(params[:page]||1).per(params[:per_page]||25) unless is_chart_or_all_companies
-    respond_to do |format|
-      respond_to_do(format, @feed_infos)
-    end
+    @feed_infos = Kaminari.paginate_array(@feed_infos).page(params[:page]||1).per(params[:per_page]||25) if @paginateable
+	  api_responds(@feed_infos)
   end
 
   private 
     
     def prepare_condition
+      @paginateable = false
       @feed_infos = []
       @show_all = is_show_all
       @conditions = FeedInfo.send("#{@category}_query")
@@ -20,25 +19,24 @@ class FeedInfosController < ApplicationController
     end
 
     def profileable?
-      current_user && !@show_all && !is_chart
+      current_user && !@show_all #&& !is_chart
     end
 
     def prepare_list_for_user
-      if !is_chart_or_all_companies
+      if !is_all_companies && !@show_all
         @feed_infos = FeedInfo.filter_feeds_data(@conditions,(params[:per_page]||25), params[:page]||1)
-		sanitize_feed_info_profile unless @show_all
+        #@paginateable = true
       elsif is_all_companies
-        #@feed_infos = FeedInfo.all_with_competitor(@conditions)
          @feed_infos = CompanyCompetitor.all.map(&:feed_info)
-      elsif is_chart
+      elsif @show_all
         @feed_infos = FeedInfo.all_sort_title(@conditions)
+        #@paginateable = true if @show_all
       end
-      #feed_info_complain(@category) if @feed_infos.size < 1
     end
 
     def sanitize_feed_info_profile
       if current_user
-        pids = current_user.profiles.map(&:id)
+        pids = current_user.user_profiles.map(&:profile_id)
         _garbage = []
         @feed_infos.each do |_info|
 	       return unless _info.class.equal?(FeedInfo)
@@ -55,7 +53,7 @@ class FeedInfosController < ApplicationController
       @category = params[:category].downcase
       if @category =~ /all/i    
         @category = @category.gsub(/all|\,/i,"")
-        @category = "all_companies" if @category =~ /_companies|_company/i
+        @category = "all_companies" if @category =~ /companies|company/i
         _return = true
       end
       return _return
@@ -80,13 +78,5 @@ class FeedInfosController < ApplicationController
     def is_all_companies
       return @category.match(/all_companies/i)
     end
-    
-#     def prepare_pagination_info
-# 	   @feed_infos = {:feed_infos=>@feed_infos,
-#                      :current_page => @feed_infos.current_page,
-#                      :per_page => @feed_infos.per_page,
-#                      :total_entries => @feed_infos.total_entries,
-#                      :total_pages => @feed_infos.total_pages
-#                     } 
-#     end
+
 end

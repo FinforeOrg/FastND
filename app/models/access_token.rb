@@ -4,10 +4,10 @@ class AccessToken
   field :category, :type => String
   field :token,    :type => String
   field :secret,   :type => String
-  field :uid,      :type => String
+  field :username, :type => String
   
   index :category
-  index :uid
+  index :username
   
-  embedded_in :user
+  belongs_to :user
 end

@@ -1,0 +1,78 @@
+_id @user.id
+full_name @user.full_name
+login @user.login
+email_work @user.email_work
+persistence_token @user.persistence_token
+single_access_token @user.single_access_token
+perishable_token @user.perishable_token
+is_public @user.is_public
+profiles @profiles.to_a do |profile|
+	_id profile.id
+	title profile.title
+	profile_category profile.profile_category do |pc|
+		_id pc.id
+		title pc.title
+	end
+end
+feed_accounts @user.feed_accounts do |column|
+	_id column.id
+	name column.name
+	category column.category
+	window_type column.window_type
+	position column.position
+	keyword_column column.keyword_column do |kc|
+		_id kc.id
+		keyword kc.keyword.gsub(/\"/,'\"')
+		follower kc.follower
+		is_aggregate kc.is_aggregate
+	end if column.isKeyword?
+	feed_token column.feed_token do |ft|
+		_id ft.id
+		token ft.token
+		secret ft.secret
+		username ft.username
+	end if column.feed_token.present?
+	user_feeds column.user_feeds do |uf|
+		_id uf.id
+		title uf.title.to_s
+		feed_info uf.feedinfo do |fi|
+			_id fi.id
+			title fi.title
+			address fi.address
+			category fi.category
+			follower fi.follower.to_i
+			if fi.price_tickers.present?
+				price_tickers fi.price_tickers do |pt|
+					_id pt.id
+					ticker pt.ticker
+				end
+				description fi.description.to_s
+			else
+				description fi.description.to_s
+			end
+		end if uf.feedinfo.present?
+	end
+end
+user_company_tabs @user.user_company_tabs do |uct|
+	_id uct.id
+	follower uct.follower.to_i
+	is_aggregate uct.is_aggregate
+	position uct.position.to_i
+	feed_info_id uct.feed_info_id
+	feed_info uct.feed_info do |fi|
+		title fi.title
+		address fi.address
+		category fi.category
+		company_competitor fi.company_competitor do |cc|
+			_id cc.id
+			bing_keyword cc.bing_keyword.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
+			blog_keyword cc.blog_keyword.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
+			broadcast_keyword cc.broadcast_keyword.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
+			company_keyword cc.company_keyword.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
+			company_ticker cc.company_ticker.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
+			competitor_ticker cc.competitor_ticker.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
+			finance_keyword cc.finance_keyword.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
+			keyword cc.keyword.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
+		end
+	end
+end

@@ -10,9 +10,8 @@ describe Profile do
   it { should have_fields(:is_private).of_type(Boolean) }
   
   it { should have_index_for(:title) }
-  it { should have_and_belong_to_many(:users) }
-  it { should have_and_belong_to_many(:feed_infos) }
-  it { should have_and_belong_to_many(:populate_feed_infos) }
+  it { should have_many(:user_profiles) }
+  it { should have_many(:feed_info_profiles) }
   it { should belong_to(:profile_category) }
 
   it 'should find public profile if is_private is not true' do

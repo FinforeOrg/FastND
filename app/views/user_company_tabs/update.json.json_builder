@@ -1,0 +1,21 @@
+_id @user_company_tab.id
+follower @user_company_tab.follower
+is_aggregate @user_company_tab.is_aggregate
+position @user_company_tab.position
+feed_info_id @user_company_tab.feed_info_id
+feed_info @user_company_tab.feed_info do |fi|
+	title fi.title
+	address fi.address
+	category fi.category
+	company_competitor fi.company_competitor do |cc|
+		_id cc.id
+		bing_keyword cc.bing_keyword.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
+		blog_keyword cc.blog_keyword.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
+		broadcast_keyword cc.broadcast_keyword.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
+		company_keyword cc.company_keyword.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
+		company_ticker cc.company_ticker.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
+		competitor_ticker cc.competitor_ticker.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
+		finance_keyword cc.finance_keyword.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
+		keyword cc.keyword.gsub(/\"/,'\"').gsub(/\,\,/,",").gsub(/\r/,"")
+	end if fi.company_competitor.present?
+end if @user_company_tab.feed_info.present?

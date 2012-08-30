@@ -7,6 +7,14 @@ FactoryGirl.define do
     password_confirmation "john12345"
   end  
   
+  factory :yacobus, :class => User do
+    full_name 'Yacobus Reinhart'
+    login 'yacobus.reinhart@gmail.com'
+    email_work 'yacobus.reinhart@gmail.com'
+    password 'asdasdasd'
+    password_confirmation 'asdasdasd'
+  end
+  
   factory :jane, :class => User do
     full_name 'Jane Doe'
     login 'janedoe'
@@ -29,7 +37,7 @@ FactoryGirl.define do
     token_preauth null
     secret_preauth null
     url_oauth null
-    uid null
+    username null
   end  
   
   factory :keyword_column_eastern_europe, :class => KeywordColumn do
@@ -51,13 +59,13 @@ FactoryGirl.define do
   end  
   
   factory :feed_account_portfolio, :class => FeedAccount do
-    name "portfolio"
+    title "portfolio"
     category "portfolio"
     window_type null
   end  
   
   factory :feed_account_rss, :class => FeedAccount do
-    name "FT WSJ and Economist"
+    title "FT WSJ and Economist"
     category "rss" 
     window_type "tab"
   end  
@@ -66,17 +74,17 @@ FactoryGirl.define do
     category "linkedin"
     token "ae23da52-eb85-41c2-a5fd-99eae5b7964f"
     secret "4475606a-ed2b-4292-9092-4fc1cf1c6869"
-    uid "g-C_xaKPQb"
+    username "g-C_xaKPQb"
   end  
   
   factory :profile_technology, :class => Profile do
     title "Technology"
-    is_private true
+    is_private false
   end  
   
   factory :profile_asset, :class => Profile do
     title "Asset Management"
-    is_private true
+    is_private false
   end  
   
   factory :profile_banking, :class => Profile do
@@ -86,7 +94,30 @@ FactoryGirl.define do
   
   factory :gmail_feed_api, :class => FeedApi do
     category "gmail"
-    
+  end
+  
+  factory :twitter_feed_api, :class => FeedApi do
+    category "twitter"
+  end
+  
+  factory :linkedin_feed_api, :class => FeedApi do
+    category "linkedin"
+  end
+  
+  factory :google_feed_api, :class => FeedApi do
+    category "google"
+  end
+  
+  factory :facebook_feed_api, :class => FeedApi do
+    category "facebook"
+  end
+  
+  factory :geografic_category, :class => ProfileCategory do
+    name "geographic"
+  end
+  
+  factory :industry_category, :class => ProfileCategory do
+    name "industry"
   end
 
   factory :nyse_company, :class => CompanyCompetitor do
@@ -116,11 +147,13 @@ FactoryGirl.define do
   
   factory :feed_info_paribas, :class => FeedInfo do
     title "BNP Paribas"
-    address "€BNPP"
+    address "BNPP"
     category "Company"
     association :company_competitor, :factory => :company_competitor_boeing
   end
   
+  # Message: Poundsterling & Euro symbols were changed by yacobus
+  #          because they gave error when running rspec in console
   factory :company_competitor_paribas, :class => CompanyCompetitor do
     broadcast_keyword "\"BNP Paribas\""
     bing_keyword "EPA:BNP, \"BNP Paribas\""
@@ -129,7 +162,7 @@ FactoryGirl.define do
     finance_keyword "EPA:BNP"
     company_keyword "EPA:BNP, \"BNP Paribas\""
     competitor_ticker "EPA:GLE,EPA:ACA,BIT:UCG,BIT:BMPS,BIT:CRG,BIT:PMI,LON:BARC,LON:HSBC,LON:RBS,LON:LLOY,LON:STAN,NYSE:JPM,NYSE:BAC,NYSE:C,NYSE:GS,NYSE:MS"
-    keyword "€ISP,€BMPS,€CRG,€PMI,$HBC,$BAC,$C,$GS,$MS,£HSBA,£RBS,£LLOY,£STAN,$RBS,$LYG,£BARC,$BCS,€GLE,€ACA,€UCG"
+    keyword "ISP,BMPS,CRG,PMI,$HBC,$BAC,$C,$GS,$MS,HSBA,RBS,LLOY,STAN,$RBS,$LYG,BARC,$BCS,GLE,ACA,UCG"
   end  
   
   factory :feed_info_abb, :class => FeedInfo do

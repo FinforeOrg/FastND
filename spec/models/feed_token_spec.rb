@@ -6,9 +6,9 @@ describe FeedToken do
   it { should have_fields(:token_preauth).of_type(String) }
   it { should have_fields(:secret_preauth).of_type(String) }
   it { should have_fields(:url_oauth).of_type(String) }
-  it { should have_fields(:uid).of_type(String) }
+  it { should have_fields(:username).of_type(String) }
 
-  it { should have_index_for(:uid) }
+  it { should have_index_for(:username) }
   it { should have_index_for(:token) }
   it { should have_index_for(:secret) }
   it { should have_index_for(:token_preauth) }

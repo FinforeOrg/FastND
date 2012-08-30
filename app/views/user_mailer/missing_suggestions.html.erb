@@ -7,7 +7,7 @@
       Hi Support & Staff,<br /><br />
       This message is sent by webservice. There's a missing suggestions with zero result with the following information:<br /><br />
            <ul style="padding-left:6px;">
-             <li>User Login: <%= @user.login %></li>
+             <li>User Login: <%= @user.email_work %></li>
              <li>User Name: <%= @user.full_name %></li>
              <li>Activity: Create auto populate for <%= @column_type %></li>
              <% @user.focuses_by_category.each do |category,focuses| %>
@@ -16,6 +16,6 @@
            </ul>
       Please login to your administrator panel then go to <%= @column_type %> or suggestion management.<br /><br />
       Thank You,<br />
-      Webservice FinforeNet
+      Webservice FastND
      </body>
    </html>

@@ -1,12 +1,13 @@
 require 'bundler/capistrano'
+set :bundle_flags, "--deployment --quiet --binstubs --shebang ruby-local-exec"
 set :application, "FastND"
-set :domain, "api.finfore.net"
+set :domain, "fastnd.com"
 set :repository,  "git@github.com:FinforeOrg/FastND.git"
 set :scm, :git
 set :branch, "master"
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
 
-set :deploy_to, "/var/www/FastND"
+set :deploy_to, "/home/staging/deploy"
 
 # since we're using assets pipelining feature of rails 3.2
 # we don't need this, turning this to true will makes capistrano throw some warning
@@ -17,7 +18,7 @@ set :user, "staging"
 set :use_sudo, true
 set :keep_releases, 10
 set :default_environment, {
-  'PATH' => "/usr/local/rbenv/shims:/usr/local/rbenv/bin:$PATH"
+  'PATH' => "$HOME/.rbenv/shims:$HOME/.rbenv/bin:$PATH"
 }
 
 role :web, domain                   # Your HTTP server, Apache/etc
@@ -35,10 +36,12 @@ namespace :deploy do
     run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
   end
   task :symlink_shared_assets do
+    run "rm -rf #{release_path}/tmp/"
+    run "rm -rf #{release_path}/log/"
     run "ln -nfs #{shared_path}/config/mongoid.yml #{release_path}/config/mongoid.yml"
     run "ln -nfs #{shared_path}/tmp #{release_path}/tmp"
     run "ln -nfs #{shared_path}/log #{release_path}/log"
-    run "ln -nfs #{shared_path}/public #{release_path}/public"
+    run "ln -fs #{shared_path}/public/* #{release_path}/public"
   end
   task :create_db_index do
     run "cd #{release_path} && rake db:mongoid:create_indexes RAILS_ENV=production"
@@ -46,4 +49,4 @@ namespace :deploy do
 end
 
 after "deploy:finalize_update", "deploy:symlink_shared_assets"
-after "deploy:finalize_update", "deploy:create_db_index"
+#after "deploy:finalize_update", "deploy:create_db_index"
