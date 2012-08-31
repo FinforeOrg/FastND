@@ -17,4 +17,8 @@ class Profile
              :conditions=>"profile_categories.title !~* '#{disclude}'")
   end
 
+  def profiles
+    Profile.find(self.feed_info_profiles.map(&:profile_id))
+  end
+
 end

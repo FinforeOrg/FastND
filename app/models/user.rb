@@ -170,6 +170,10 @@ class User
     end
     return {:user => _return, :selecteds => _selecteds}
   end
+
+  def profiles
+    Profile.find(self.user_profiles.map(&:profile_ids))
+  end
   
   def show_column(column_id)
     self.feed_accounts.where(:_id => column_id).first
