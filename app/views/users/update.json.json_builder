@@ -53,7 +53,7 @@ feed_accounts @user.feed_accounts do |column|
 		end if uf.feedinfo.present?
 	end
 end
-user_company_tabs @user.user_company_tabs do |uct|
+user_company_tabs @user.user_company_tabs.sort_by(&:title) do |uct|
 	_id uct.id
 	follower uct.follower.to_i
 	is_aggregate uct.is_aggregate

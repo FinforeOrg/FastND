@@ -1,7 +1,7 @@
 class UserCompanyTabsController < ApplicationController
   
   def index
-    @user_company_tabs = current_user.user_company_tabs
+    @user_company_tabs = current_user.user_company_tabs.sort_by(&:title)
     api_responds(@user_company_tabs)
   end
 
