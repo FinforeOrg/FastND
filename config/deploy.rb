@@ -1,10 +1,10 @@
 require 'bundler/capistrano'
 set :bundle_flags, "--deployment --quiet --binstubs --shebang ruby-local-exec"
 set :application, "FastND"
-set :domain, "inter.fastnd.com"
+set :domain, "fastnd.com"
 set :repository,  "git@github.com:FinforeOrg/FastND.git"
 set :scm, :git
-set :branch, "staging"
+set :branch, "master"
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
 
 set :deploy_to, "/home/staging/deploy"

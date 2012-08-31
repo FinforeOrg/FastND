@@ -4,7 +4,7 @@ class ProfileCategory
   field :title, :type => String
   
   has_many :profiles
-  
+
   def self.with_public_profile
     self.includes(:profiles).where(public_opts)
   end
