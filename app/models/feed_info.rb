@@ -14,7 +14,7 @@ class FeedInfo < Base::FeedInfo
 
   def self.filter_feeds_data(conditions, _limit, _page)
 	  feed_infos = self.includes(:feed_info_profiles) if conditions[:_id]
-	  return self.where(conditions).asc(:title)
+	  return self.where(conditions).asc(:position).asc(:title)
   end
 
   def self.all_with_competitor(conditions)
