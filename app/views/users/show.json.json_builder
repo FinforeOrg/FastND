@@ -57,7 +57,6 @@ user_company_tabs @user.user_company_tabs.sort_by(&:title) do |uct|
 	_id uct.id
 	follower uct.follower.to_i
 	is_aggregate uct.is_aggregate
-	position uct.position.to_i
 	feed_info_id uct.feed_info_id
 	feed_info uct.feed_info do |fi|
 		title fi.title

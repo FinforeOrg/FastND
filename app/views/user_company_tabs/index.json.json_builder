@@ -2,7 +2,6 @@ array @user_company_tabs do |tab|
 	_id tab.id
 	follower tab.follower
 	is_aggregate tab.is_aggregate
-	position tab.position
 	feed_info_id tab.feed_info_id
 	feed_info tab.feed_info do |fi|
 		title fi.title

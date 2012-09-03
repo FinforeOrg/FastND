@@ -2,7 +2,6 @@ if @user_company_tab.is_a?(UserCompanyTab)
 	_id @user_company_tab.id
 	follower @user_company_tab.follower
 	is_aggregate @user_company_tab.is_aggregate
-	position @user_company_tab.position
 	feed_info_id @user_company_tab.feed_info_id
 	feed_info @user_company_tab.feed_info do |fi|
 		title fi.title
