@@ -5,7 +5,7 @@ class FeedInfosController < ApplicationController
   def index  
     prepare_list_for_user if current_user
     @feed_infos = Kaminari.paginate_array(@feed_infos).page(params[:page]||1).per(params[:per_page]||25) if @paginateable
-	  api_responds(@feed_infos)
+    api_responds(@feed_infos)
   end
 
   private 
