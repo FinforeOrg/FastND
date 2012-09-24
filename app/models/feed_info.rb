@@ -1,6 +1,10 @@
 class FeedInfo < Base::FeedInfo  
+  include Finforenet::Models::ExtFeedInfo
+
   field :is_populate, :type => Boolean, :default => false
   field :position,    :type => Integer
+  field :_profile_ids, :type => Array
+  
   index :position
   index :is_populate
 
