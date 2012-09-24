@@ -9,6 +9,7 @@ class User
   field :is_online,             :type => Boolean, :default => false
   field :is_public,             :type => Boolean, :default => false
   field :_profile_ids,          :type => Array
+  field :has_populated,         :type => Boolean, :default => false
 
   index :email_work
   index :login
@@ -73,6 +74,14 @@ class User
   
   def has_columns?
     (self.feed_accounts.count > 0)
+  end
+
+  def is_populateable?
+    !has_populate_columns? && user_profiles.present? && !has_populated
+  end
+
+  def has_populate_columns?
+    self.feed_accounts.where(:category.ne => /portfolio|linkedin|twitter/i).present?
   end
 
   def self.find_by_id(val)

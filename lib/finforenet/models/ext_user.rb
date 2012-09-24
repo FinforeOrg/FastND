@@ -41,6 +41,7 @@ module Finforenet
       
          #create populate for company tabs
          populate_company_tabs
+         self.update_attribute(:has_populated, true)
       end
 
       def populate_company_tabs
