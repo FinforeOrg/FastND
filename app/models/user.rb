@@ -77,12 +77,13 @@ class User
   end
 
   def is_populateable?
-    !has_populate_columns? && user_profiles.present? && !has_populated
+    # !has_populate_columns? && user_profiles.present? && !has_populated
+    user_profiles.present? && !has_populated
   end
 
-  def has_populate_columns?
-    self.feed_accounts.where(:category.ne => /portfolio|linkedin|twitter/i).present?
-  end
+  # def has_populate_columns?
+  #   self.feed_accounts.where(:category => /company|rss|podcast/i).present?
+  # end
 
   def self.find_by_id(val)
     self.where(:_id => val).first
