@@ -110,7 +110,7 @@ class UsersController < ApplicationController
 	    @user.check_profiles(user[:profile_ids]) if user[:profile_ids].present?
       #@user.create_autopopulate if params[:auto_populate].present?
       @user.create_autopopulate if @user.is_populateable? && @user.valid?
-      @user.reload!
+      @user.reload
       UserMailer.welcome_email(@user, user[:password]).deliver unless user[:password].blank?
       get_profiles
       api_responds(@user)
