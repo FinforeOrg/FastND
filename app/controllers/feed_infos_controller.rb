@@ -1,7 +1,7 @@
 class FeedInfosController < ApplicationController
-  caches_action :index, :cache_path => Proc.new { |c| c.params }
+  caches_action :index, :cache_path => Proc.new { |c| "#{c.params[:category].to_s.gsub(/\W/,'_')}_#{c.params[:per_page]}_#{c.params[:page]}" }, :gzip => :best_speed, :if => Proc.new { |c| c.params[:category].to_s =~ /all/i }
   before_filter :prepare_condition, :only => [:index]
-
+  
   def index  
     prepare_list_for_user if current_user
     @feed_infos = Kaminari.paginate_array(@feed_infos).page(params[:page]||1).per(params[:per_page]||25) if @paginateable

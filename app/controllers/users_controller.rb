@@ -44,10 +44,9 @@ class UsersController < ApplicationController
   def update
     access_denied unless is_owner?
     params[:user][:login] = params[:user][:email_work] if params[:user][:login].blank?
-    user = params[:user]    
-    is_new = @user.feed_accounts.count < 1 && !user[:password].blank?
-    @user.is_exist(user[:email_work]) if user[:email_work].present? && is_new
-    is_updatable?(user) ? after_save(user, is_new) : error_responds(@user)
+    user = params[:user]
+    @user.is_exist(user[:email_work]) if user[:email_work].present?
+    is_updatable?(user) ? after_save(user) : error_responds(@user)
   end
   
   def generate_population
@@ -107,10 +106,12 @@ class UsersController < ApplicationController
       error_responds(error_object("Access denied"))
     end
     
-    def after_save(user, is_new = true)
+    def after_save(user)
 	    @user.check_profiles(user[:profile_ids]) if user[:profile_ids].present?
-      @user.create_autopopulate if params[:auto_populate].present?
-      UserMailer.welcome_email(@user, user[:password]).deliver if is_new
+      #@user.create_autopopulate if params[:auto_populate].present?
+      @user.create_autopopulate if @user.is_populateable? && @user.valid?
+      @user.reload
+      UserMailer.welcome_email(@user, user[:password]).deliver unless user[:password].blank?
       get_profiles
       api_responds(@user)
     end
