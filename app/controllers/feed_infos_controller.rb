@@ -1,5 +1,6 @@
 class FeedInfosController < ApplicationController
-  caches_action :index, :cache_path => Proc.new { |c| "#{c.params[:category].to_s.gsub(/\W/,'_')}_#{c.params[:per_page]}_#{c.params[:page]}" }, :gzip => :best_speed, :if => Proc.new { |c| c.params[:category].to_s =~ /all/i }
+  #caches_action :index, :cache_path => Proc.new { |c| "#{c.params[:category].to_s.gsub(/\W/,'_')}_#{c.params[:per_page]}_#{c.params[:page]}" }, :gzip => :best_speed, :if => Proc.new { |c| c.params[:category].to_s =~ /all/i }
+  caches_action :index, :cache_path => :cache_action_name.to_proc, :gzip => :best_speed
   before_filter :prepare_condition, :only => [:index]
   
   def index  
@@ -8,8 +9,16 @@ class FeedInfosController < ApplicationController
     api_responds(@feed_infos)
   end
 
-  private 
-    
+    def cache_action_name
+      name_path = "#{params[:category].to_s.gsub(/\W/,'_')}_#{params[:per_page]}_#{params[:page]}" 
+      if params[:category].to_s !~ /all/i
+        profile_ids = current_user._profile_ids.join("_")
+        name_path = "#{name_path}_#{profile_ids}" 
+      end
+      return Digest::MD5.hexdigest(name_path)
+    end
+
+  private    
     def prepare_condition
       @paginateable = false
       @feed_infos = []
@@ -28,7 +37,7 @@ class FeedInfosController < ApplicationController
 
     def prepare_list_for_user
       if !is_all_companies && !@show_all
-        @feed_infos = FeedInfo.filter_feeds_data(@conditions,(params[:per_page]||25), params[:page]||1)
+        @feed_infos = FeedInfo.filter_feeds_data(@conditions,(params[:per_page]||25), params[:page]||1, false)
         #@paginateable = true
       elsif is_all_companies
          @feed_infos = CompanyCompetitor.all.map(&:feed_info)

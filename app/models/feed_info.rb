@@ -16,7 +16,7 @@ class FeedInfo < Base::FeedInfo
   has_one  :company_competitor,  :dependent => :destroy
   has_many :feed_info_profiles,  :dependent => :destroy, :class_name => "FeedInfo::Profile"
 
-  def self.filter_feeds_data(conditions, _limit, _page)
+  def self.filter_feeds_data(conditions, _limit, _page, is_paginated = true)
     result = self
     result = result.includes(:feed_info_profiles) if conditions[:_id]
     result = result.where(conditions)
@@ -25,6 +25,7 @@ class FeedInfo < Base::FeedInfo
     else
       result = result.asc(:title)
     end
+    return result unless is_paginated
     return result.page(_page).per(_limit)
   end
 
