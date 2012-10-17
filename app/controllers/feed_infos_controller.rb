@@ -14,8 +14,12 @@ class FeedInfosController < ApplicationController
       @paginateable = false
       @feed_infos = []
       @show_all = is_show_all
-      @conditions = FeedInfo.send("#{@category}_query")
-      @conditions = FeedInfo.profiles_query(current_user,@conditions) if profileable?
+      if !is_all_companies && profileable? && !@show_all
+        @conditions = FeedInfo.relevant_query(current_user, @category)
+      else
+        @conditions = FeedInfo.send("#{@category}_query")
+        @conditions = FeedInfo.profiles_query(current_user,@conditions) if profileable?
+      end
     end
 
     def profileable?

@@ -29,7 +29,24 @@ module Finforenet
 		    	options.merge!({:address=> {"$not" => REGEX_HTTP}, :category => {"$not" => /chart/i} })
 		    	return options
 		    end
-		    
+
+		def relevant_query(user, category)
+		  user_profiles = user._profile_ids
+                  relevant_ids = []
+                  category = "chart|price" if category =~ /chart|price/i
+                  conditions = {category: /#{category}/i}
+                  user_profiles.each do |up|
+                    profile = Profile.find(up)
+                    conditions.merge!({profile_category_id: profile.profile_category_id, profile_id: up})
+                    if relevant_ids.present?
+                      conditions.merge!({:feed_info_id.in => relevant_ids})
+                    end
+                    tmp_relevant_ids = FeedInfo::Profile.where(conditions).distinct(:feed_info_id)
+                    relevant_ids = tmp_relevant_ids if tmp_relevant_ids.present?
+		  end
+                  return {:_id =>  {"$in" =>relevant_ids}}
+                end
+
 		    def twitter_query(options = {})
 		    	options.merge!({:category => /twitter/i, :address => {"$not" => REGEX_HTTP}})
 		    	return options

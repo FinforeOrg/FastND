@@ -45,7 +45,7 @@ class UsersController < ApplicationController
     access_denied unless is_owner?
     params[:user][:login] = params[:user][:email_work] if params[:user][:login].blank?
     user = params[:user]
-    @user.is_exist(user[:email_work]) if user[:email_work].present?
+    @user.is_exist(user[:email_work]) if user[:email_work].present? && user[:email_work].to_s.downcase != @user.email_work
     is_updatable?(user) ? after_save(user) : error_responds(@user)
   end
   

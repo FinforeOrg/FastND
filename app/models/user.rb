@@ -169,7 +169,8 @@ class User
       pids.each do |pid|
         User::Profile.create({:profile_id => pid, :user_id => self.id})
       end
-      self._profile_ids = self.user_profiles.map(&:profile_id)
+      self._profile_ids = User::Profile.where(:user_id => self.id).map(&:profile_id)
+      self.save
     end
   end
   
