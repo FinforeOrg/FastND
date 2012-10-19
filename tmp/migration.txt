@@ -1,0 +1,106 @@
+pcs = File.new("#{Rails.root}/jsons/users.json", 'r')
+x = []
+fas = []
+pcs.each do |pc_line|
+	pc_str = pc_line.gsub(/(ObjectId|Date)\(/i,"").gsub(/\)\s/i,"").gsub(/\)\,/i,",").gsub(/\n$/i,"").gsub(/\s\,/i,",")
+	parser = Yajl::Parser.new
+	pc_json = parser.parse(pc_str)
+	feed_accounts = pc_json.delete('feed_accounts')
+	user_company_tabs = pc_json.delete('user_company_tabs')
+	access_tokens = pc_json.delete('access_tokens')
+	pids = pc_json.delete('profile_ids')
+	pc_json.delete('remember_columns')
+	pc_json.delete('remember_companies')
+	pc_json['created_at'] = pc_json['created_at'].to_i / 1000
+	pc_json['updated_at'] = pc_json['created_at'].to_i / 1000
+	pc_json['last_request_at'] = pc_json['last_request_at'].to_i / 1000
+	pc_json['current_login_at'] = pc_json['current_login_at'].to_i / 1000
+	user = User.create(pc_json)
+	y = 0
+	if feed_accounts.present? && feed_accounts.is_a?(Array) && user.valid?
+	  feed_accounts.each do |fa|
+	    acc_opts = {:_id => fa['_id'], :title => fa['name'], :category => fa['category'], :window_type => (fa['window_type'] || "tab"), :position => (fa['position'] || -1), :user_id => user.id}
+	    if fa['feed_token'].present?
+	      fa['feed_token']['username'] = fa['feed_token']['uid']
+	      fa['feed_token'].delete('uid')
+	      acc_opts.merge!({:feed_token_attributes => fa['feed_token']}) 
+	    end
+	    acc_opts.merge!({:keyword_column_attributes => fa['keyword_column']}) if fa['keyword_column'].present?
+	    fas << acc_opts
+	    account = FeedAccount.create(acc_opts)
+	    fa['user_feeds'].each do |uf|
+	      fi = FeedInfo.where(:_id => uf['feed_info_id']).first
+	      if fi
+	        UserFeed.create({:title => uf['title'], :feed_info_id => fi.id, :feed_account_id => account.id})
+	      elsif uf['feed_info']
+	        UserFeed.create({:title => uf['title'], :feed_info_attributes => uf['feed_info'], :feed_account_id => account.id})
+	      end
+	    end if fa['user_feeds'].present?
+	    y += 1
+	  end
+	  x << y
+	end
+	if pids.present?
+	  pids.each do |pid|
+	    User::Profile.create({:user_id => user.id, :profile_id => BSON::ObjectId(pid)})
+	  end
+	end
+end
+
+pcs = File.new("#{Rails.root}/jsons/feed_infos.json", 'r')
+pcs.each do |pc_line|
+  pc_str = pc_line.gsub(/(ObjectId|Date)\(/i,"").gsub(/\)\s/i,"").gsub(/\)\,/i,",").gsub(/\n$/i,"").gsub(/\s\,/i,",")
+  parser = Yajl::Parser.new
+  pc_json = parser.parse(pc_str)
+  fi = FeedInfo.create({:_id => pc_json['_id'], :title => pc_json['title'], :address => pc_json['address'], :category => pc_json['category'], :follower => pc_json['follower'], :image => pc_json['image'], :description => pc_json['description'], :is_populate => pc_json['is_populate'] || false })
+	if fi.valid?
+	  pc_json['profile_ids'].each do |pid|
+	    FeedInfo::Profile.create({:feed_info_id => BSON::ObjectId(pc_json['_id']), :profile_id => BSON::ObjectId(pid)})
+	  end
+  end
+end
+
+pcs = File.new("#{Rails.root}/jsons/price_tickers.json", 'r')
+pcs.each do |pc_line|
+  pc_str = pc_line.gsub(/(ObjectId|Date)\(/i,"").gsub(/\)\s/i,"").gsub(/\)\,/i,",").gsub(/\n$/i,"").gsub(/\s\,/i,",")
+  parser = Yajl::Parser.new
+  pc_json = parser.parse(pc_str)
+  PriceTicker.create({:feed_info_id => BSON::ObjectId(pc_json['feed_info_id']), :ticker => pc_json['ticker']})
+end
+
+pcs = File.new("#{Rails.root}/jsons/feed_apis.json", 'r')
+pcs.each do |pc_line|
+	pc_str = pc_line.gsub(/(ObjectId|Date)\(/i,"").gsub(/\)\s/i,"").gsub(/\)\,/i,",").gsub(/\n$/i,"").gsub(/\s\,/i,",")
+	parser = Yajl::Parser.new
+	pc_json = parser.parse(pc_str)
+	FeedApi.create({:api => pc_json['api'], :secret => pc_json['secret'], :category => pc_json['category']})
+end
+
+pcs = File.new("#{Rails.root}/jsons/users.json", 'r')
+pcs.each do |pc_line|
+	pc_str = pc_line.gsub(/(ObjectId|Date)\(/i,"").gsub(/\)\s/i,"").gsub(/\)\,/i,",").gsub(/\n$/i,"").gsub(/\s\,/i,",")
+	parser = Yajl::Parser.new
+	pc_json = parser.parse(pc_str)
+	user = User.where(:_id => pc_json['_id']).first
+	if user
+	  pc_json['user_company_tabs'].each do |uct|
+	    UserCompanyTab.create({:follower => uct['follower'], :is_aggregate => (uct[:is_aggregate] || false), :position => (uct[:position].to_i || -1), :user_id => user.id, :feed_info_id => BSON::ObjectId(uct['feed_info_id'])})
+	  end if pc_json['user_company_tabs'].present?
+	end
+end
+
+pcs = File.new("#{Rails.root}/jsons/company_competitors.json", 'r')
+pcs.each do |pc_line|
+	pc_str = pc_line.gsub(/(ObjectId|Date)\(/i,"").gsub(/\)\s/i,"").gsub(/\)\,/i,",").gsub(/\n$/i,"").gsub(/\s\,/i,",")
+	parser = Yajl::Parser.new
+	pc_json = parser.parse(pc_str)
+	CompanyCompetitor.create(pc_json)
+end
+
+pcs = File.new("#{Rails.root}/jsons/admin_cores.json", 'r')
+pcs.each do |pc_line|
+	pc_str = pc_line.gsub(/(ObjectId|Date)\(/i,"").gsub(/\)\s/i,"").gsub(/\)\,/i,",").gsub(/\n$/i,"").gsub(/\s\,/i,",")
+	parser = Yajl::Parser.new
+	pc_json = parser.parse(pc_str)
+	AdminCore.create(pc_json)
+end
