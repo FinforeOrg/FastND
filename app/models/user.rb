@@ -68,8 +68,8 @@ class User
   end
   
   def is_exist(work_email)
-    is_exist = User.where(:email_work => work_email).count
-    self.errors.add(:email_work, "is already taken.") if is_exist > 0
+    _is_exist = User.where(:email_work => work_email).count
+    self.errors.add(:email_work, "is already taken.") if _is_exist > 0
   end
   
   def has_columns?

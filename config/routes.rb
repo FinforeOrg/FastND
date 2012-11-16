@@ -80,6 +80,7 @@ FinforeWeb::Application.routes.draw do
   resources :user_company_tabs
   resources :feed_infos
   
+  get   '/finance/info'             => 'finance#info'  
   match '/client/login'             => 'user_sessions#new'
   match '/logout'                   => 'user_sessions#destroy'
   match 'auth/:provider'            => 'user_sessions#network_sign_in'
