@@ -1,5 +1,6 @@
 class LinkedinsController < ApplicationController
   require 'linkedin'
+  require 'yajl'
   require 'xmlsimple'
   require 'net/http'
   skip_before_filter :require_user
@@ -98,7 +99,7 @@ class LinkedinsController < ApplicationController
     end
     rescue => e
       respond_to do |format|
-        respond_to_do(format, e)
+        respond_to_do(format, {error: e.to_s})
       end    
   end
 
