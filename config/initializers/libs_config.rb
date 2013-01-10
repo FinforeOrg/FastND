@@ -6,4 +6,4 @@ end
 require "#{Rails.root}/lib/portfolio_event.rb"
 require "#{Rails.root}/lib/fgraph.rb"
 require "#{Rails.root}/lib/oauth_media.rb"
-FinforeWeb::Application.middleware.use Oink::Middleware
+#FinforeWeb::Application.middleware.use Oink::Middleware
