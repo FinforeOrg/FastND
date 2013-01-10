@@ -135,7 +135,6 @@ GEM
     hashie (1.2.0)
     highline (1.6.15)
     hike (1.2.1)
-    hodel_3000_compliant_logger (0.1.1)
     htmlentities (4.3.1)
     httparty (0.9.0)
       multi_json (~> 1.0)
@@ -206,9 +205,6 @@ GEM
       jwt (~> 0.1.4)
       multi_json (~> 1.0)
       rack (~> 1.2)
-    oink (0.10.0)
-      activerecord
-      hodel_3000_compliant_logger
     polyglot (0.3.3)
     profanity_filter (0.1.1)
     pry (0.9.10)
@@ -388,7 +384,6 @@ DEPENDENCIES
   nokogiri (>= 1.5.0)
   oauth
   oauth2
-  oink
   profanity_filter
   pry
   pry-doc

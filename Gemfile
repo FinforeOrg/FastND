@@ -12,7 +12,7 @@ end
 gem 'scout'
 gem 'elif'
 gem 'request-log-analyzer'
-gem 'oink'
+#gem 'oink'
 
 # Cross Support
 gem 'rack-cors', :require => 'rack/cors', :path => "./vendor/gems/rack-cors"
