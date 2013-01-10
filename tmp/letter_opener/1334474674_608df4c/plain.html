@@ -1,0 +1,282 @@
+<style type="text/css">
+  #message_headers {
+    position: absolute;
+    top: 0px;
+    left: 0;
+    width: 100%;
+    height: 85px;
+    padding: 10px 0 0 0;
+    margin: 0;
+    background: #fff;
+    font-size: 12px;
+    font-family: "Lucida Grande";
+    border-bottom: 1px solid #dedede;
+    overflow: hidden;
+  }
+
+  #message_headers dl {
+    margin: 0;
+    padding: 0;
+  }
+
+  #message_headers dt {
+    width: 60px;
+    padding: 1px;
+    float: left;
+    text-align: right;
+    font-weight: bold;
+    color: #7f7f7f;
+  }
+
+  #message_headers dd {
+    margin-left: 70px;
+    padding: 1px;
+  }
+
+  #message_headers p.alternate {
+    position: absolute;
+    top: 0;
+    right: 15px;
+  }
+
+  #message_headers p.alternate a {
+    color: #09c;
+  }
+
+  pre#message_body {
+    padding: 10px;
+    word-wrap: break-word;
+  }
+
+  body {
+    margin-top: 96px;
+  }
+</style>
+
+<div id="message_headers">
+  <dl>
+    <dt>From:</dt>
+    <dd>info@finfore.net</dd>
+
+    <dt>Subject:</dt>
+    <dd><strong>[FinforeNet Error] user_sessions#public_login (NameError) "undefined local variable or method `user' for #<UserSessionsController:0x007fbbf9d563c8>"</strong></dd>
+
+    <dt>Date:</dt>
+    <dd>Apr 15, 2012 02:24:34 PM WIT</dd>
+
+    <dt>To:</dt>
+    <dd>yacobus.reinhart@gmail.com</dd>
+  </dl>
+
+  
+</div>
+
+
+  <pre id="message_body">A NameError occurred in user_sessions#public_login:
+
+  undefined local variable or method `user' for #&lt;UserSessionsController:0x007fbbf9d563c8&gt;
+  app/controllers/user_sessions_controller.rb:112:in `public_login'
+
+-------------------------------
+Request:
+-------------------------------
+
+  * URL       : http://fastnd.local/user_sessions/public_login.json
+  * IP address: 127.0.0.1
+  * Parameters: {&quot;pids&quot;=&gt;&quot;[FILTERED]&quot;, &quot;action&quot;=&gt;&quot;public_login&quot;, &quot;controller&quot;=&gt;&quot;user_sessions&quot;, &quot;format&quot;=&gt;&quot;json&quot;}
+  * Rails root: /Users/yacobusreinhart/local/tmp/FastND
+
+-------------------------------
+Session:
+-------------------------------
+
+  * session id: nil
+  * data: {}
+
+-------------------------------
+Environment:
+-------------------------------
+
+  * CONTENT_LENGTH                                 : 83
+  * CONTENT_TYPE                                   : application/x-www-form-urlencoded
+  * DOCUMENT_ROOT                                  : /Users/yacobusreinhart/local/tmp/FastNd/public
+  * HTTP_ACCEPT                                    : application/json, text/javascript, */*; q=0.01
+  * HTTP_ACCEPT_CHARSET                            : ISO-8859-1,utf-8;q=0.7,*;q=0.3
+  * HTTP_ACCEPT_ENCODING                           : gzip,deflate,sdch
+  * HTTP_ACCEPT_LANGUAGE                           : en-US,en;q=0.8
+  * HTTP_CONNECTION                                : keep-alive
+  * HTTP_COOKIE                                    : _FinforeWeb_session=BAh7BkkiD3Nlc3Npb25faWQGOgZFRkkiJWI5MWU4MjkwNWNkZjhlZjJmYWMxMzhlNmM0YmNlZGRmBjsAVA%3D%3D--d14ea63285cc77e4ad19c61d56cbe9698daece86
+  * HTTP_HOST                                      : fastnd.local
+  * HTTP_ORIGIN                                    : http://fastnd.local
+  * HTTP_REFERER                                   : http://fastnd.local/
+  * HTTP_USER_AGENT                                : Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_2) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.162 Safari/535.19
+  * HTTP_X_REQUESTED_WITH                          : XMLHttpRequest
+  * ORIGINAL_FULLPATH                              : /user_sessions/public_login.json
+  * PASSENGER_APP_SPAWNER_IDLE_TIME                : [FILTERED]
+  * PASSENGER_APP_TYPE                             : rack
+  * PASSENGER_CONNECT_PASSWORD                     : [FILTERED]
+  * PASSENGER_DEBUGGER                             : false
+  * PASSENGER_ENVIRONMENT                          : development
+  * PASSENGER_FRAMEWORK_SPAWNER_IDLE_TIME          : [FILTERED]
+  * PASSENGER_FRIENDLY_ERROR_PAGES                 : true
+  * PASSENGER_GROUP                                : 
+  * PASSENGER_MAX_REQUESTS                         : 0
+  * PASSENGER_MIN_INSTANCES                        : 1
+  * PASSENGER_SHOW_VERSION_IN_HEADER               : true
+  * PASSENGER_SPAWN_METHOD                         : smart-lv2
+  * PASSENGER_USER                                 : 
+  * PASSENGER_USE_GLOBAL_QUEUE                     : true
+  * PATH_INFO                                      : /user_sessions/public_login.json
+  * QUERY_STRING                                   : 
+  * REMOTE_ADDR                                    : 127.0.0.1
+  * REMOTE_PORT                                    : 59653
+  * REQUEST_METHOD                                 : POST
+  * REQUEST_URI                                    : /user_sessions/public_login.json
+  * SCGI                                           : 1
+  * SCRIPT_NAME                                    : 
+  * SERVER_ADDR                                    : 127.0.0.1
+  * SERVER_NAME                                    : fastnd.local
+  * SERVER_PORT                                    : 80
+  * SERVER_PROTOCOL                                : HTTP/1.1
+  * SERVER_SOFTWARE                                : nginx/1.0.10
+  * UNION_STATION_SUPPORT                          : false
+  * _                                              : _
+  * action_controller.instance                     : user_sessions#public_login
+  * action_dispatch.backtrace_cleaner              : #&lt;Rails::BacktraceCleaner:0x007fbbf9daac20&gt;
+  * action_dispatch.cookies                        : #&lt;ActionDispatch::Cookies::CookieJar:0x007fbbf9bc2a98&gt;
+  * action_dispatch.logger                         : #&lt;ActiveSupport::TaggedLogging:0x007fbbf9e63a40&gt;
+  * action_dispatch.parameter_filter               : [:password, :password_confirmation, :auth_token, :auth_session, :auth_secret, :id, :password, :password_confirmation, /RAW_POST_DATA/]
+  * action_dispatch.remote_ip                      : 127.0.0.1
+  * action_dispatch.request.content_type           : application/x-www-form-urlencoded
+  * action_dispatch.request.flash_hash             : 
+  * action_dispatch.request.formats                : [application/json]
+  * action_dispatch.request.parameters             : {&quot;pids&quot;=&gt;&quot;[FILTERED]&quot;, &quot;action&quot;=&gt;&quot;public_login&quot;, &quot;controller&quot;=&gt;&quot;user_sessions&quot;, &quot;format&quot;=&gt;&quot;json&quot;}
+  * action_dispatch.request.path_parameters        : {:action=&gt;&quot;public_login&quot;, :controller=&gt;&quot;user_sessions&quot;, :format=&gt;&quot;json&quot;}
+  * action_dispatch.request.query_parameters       : {}
+  * action_dispatch.request.request_parameters     : {&quot;pids&quot;=&gt;&quot;[FILTERED]&quot;}
+  * action_dispatch.request.unsigned_session_cookie: {&quot;session_id&quot;=&gt;&quot;[FILTERED]&quot;}
+  * action_dispatch.request_id                     : [FILTERED]
+  * action_dispatch.routes                         : #&lt;ActionDispatch::Routing::RouteSet:0x007fbbe9adabe0&gt;
+  * action_dispatch.secret_token                   : eb0b46d6a3ab80d7f2c94d9940386a1d73d8056184aee3aad31d1546b14585f572fcb87e52c06b5271d1c2b9141e4c158215ddea63365fc255d35fdb743f1728
+  * action_dispatch.show_detailed_exceptions       : true
+  * action_dispatch.show_exceptions                : true
+  * exception_notifier.options                     : {:email_prefix=&gt;&quot;[FinforeNet Error] &quot;, :sender_address=&gt;&quot;info@finfore.net&quot;, :exception_recipients=&gt;[&quot;yacobus.reinhart@gmail.com&quot;], :ignore_exceptions=&gt;[ActiveRecord::RecordNotFound, AbstractController::ActionNotFound, ActionController::RoutingError]}
+  * rack.errors                                    : #&lt;IO:0x007fbbf986fc88&gt;
+  * rack.input                                     : #&lt;PhusionPassenger::Utils::RewindableInput:0x007fbbef157bd0&gt;
+  * rack.multiprocess                              : true
+  * rack.multithread                               : false
+  * rack.request.cookie_hash                       : {&quot;_FinforeWeb_session&quot;=&gt;&quot;BAh7BkkiD3Nlc3Npb25faWQGOgZFRkkiJWI5MWU4MjkwNWNkZjhlZjJmYWMxMzhlNmM0YmNlZGRmBjsAVA==--d14ea63285cc77e4ad19c61d56cbe9698daece86&quot;}
+  * rack.request.cookie_string                     : _FinforeWeb_session=BAh7BkkiD3Nlc3Npb25faWQGOgZFRkkiJWI5MWU4MjkwNWNkZjhlZjJmYWMxMzhlNmM0YmNlZGRmBjsAVA%3D%3D--d14ea63285cc77e4ad19c61d56cbe9698daece86
+  * rack.request.form_hash                         : {&quot;pids&quot;=&gt;&quot;[FILTERED]&quot;}
+  * rack.request.form_input                        : #&lt;PhusionPassenger::Utils::RewindableInput:0x007fbbef157bd0&gt;
+  * rack.request.form_vars                         : pids=4ed12d737b3fc6412e00018a%2C4ed12d737b3fc6412e0001a2%2C4ed12d737b3fc6412e0001bb
+  * rack.request.query_hash                        : {}
+  * rack.request.query_string                      : 
+  * rack.run_once                                  : false
+  * rack.session                                   : {}
+  * rack.session.options                           : {:path=&gt;&quot;/&quot;, :domain=&gt;nil, :expire_after=&gt;nil, :secure=&gt;false, :httponly=&gt;true, :defer=&gt;false, :renew=&gt;false, :coder=&gt;#&lt;Rack::Session::Cookie::Base64::Marshal:0x007fbbec217e38&gt;, :id=&gt;&quot;[FILTERED]&quot;}
+  * rack.url_scheme                                : http
+  * rack.version                                   : [1, 0]
+  
+  * Process: 77496
+  * Server : Yacobuss-MacBook-Pro
+
+-------------------------------
+Backtrace:
+-------------------------------
+
+  app/controllers/user_sessions_controller.rb:112:in `public_login'
+  actionpack (3.2.2) lib/action_controller/metal/implicit_render.rb:4:in `send_action'
+  actionpack (3.2.2) lib/abstract_controller/base.rb:167:in `process_action'
+  actionpack (3.2.2) lib/action_controller/metal/rendering.rb:10:in `process_action'
+  actionpack (3.2.2) lib/abstract_controller/callbacks.rb:18:in `block in process_action'
+  activesupport (3.2.2) lib/active_support/callbacks.rb:425:in `_run__855845943791636394__process_action__1174588900600768871__callbacks'
+  activesupport (3.2.2) lib/active_support/callbacks.rb:405:in `__run_callback'
+  activesupport (3.2.2) lib/active_support/callbacks.rb:385:in `_run_process_action_callbacks'
+  activesupport (3.2.2) lib/active_support/callbacks.rb:81:in `run_callbacks'
+  actionpack (3.2.2) lib/abstract_controller/callbacks.rb:17:in `process_action'
+  actionpack (3.2.2) lib/action_controller/metal/rescue.rb:29:in `process_action'
+  actionpack (3.2.2) lib/action_controller/metal/instrumentation.rb:30:in `block in process_action'
+  activesupport (3.2.2) lib/active_support/notifications.rb:123:in `block in instrument'
+  activesupport (3.2.2) lib/active_support/notifications/instrumenter.rb:20:in `instrument'
+  activesupport (3.2.2) lib/active_support/notifications.rb:123:in `instrument'
+  actionpack (3.2.2) lib/action_controller/metal/instrumentation.rb:29:in `process_action'
+  actionpack (3.2.2) lib/action_controller/metal/params_wrapper.rb:205:in `process_action'
+  actionpack (3.2.2) lib/abstract_controller/base.rb:121:in `process'
+  actionpack (3.2.2) lib/abstract_controller/rendering.rb:45:in `process'
+  actionpack (3.2.2) lib/action_controller/metal.rb:203:in `dispatch'
+  actionpack (3.2.2) lib/action_controller/metal/rack_delegation.rb:14:in `dispatch'
+  actionpack (3.2.2) lib/action_controller/metal.rb:246:in `block in action'
+  actionpack (3.2.2) lib/action_dispatch/routing/route_set.rb:67:in `call'
+  actionpack (3.2.2) lib/action_dispatch/routing/route_set.rb:67:in `dispatch'
+  actionpack (3.2.2) lib/action_dispatch/routing/route_set.rb:30:in `call'
+  journey (1.0.3) lib/journey/router.rb:68:in `block in call'
+  journey (1.0.3) lib/journey/router.rb:56:in `each'
+  journey (1.0.3) lib/journey/router.rb:56:in `call'
+  actionpack (3.2.2) lib/action_dispatch/routing/route_set.rb:594:in `call'
+  oink (0.9.3) lib/oink/middleware.rb:17:in `call'
+  mongoid (2.4.7) lib/rack/mongoid/middleware/identity_map.rb:33:in `block in call'
+  mongoid (2.4.7) lib/mongoid.rb:132:in `unit_of_work'
+  mongoid (2.4.7) lib/rack/mongoid/middleware/identity_map.rb:33:in `call'
+  vendor/gems/rack-cors/lib/rack/cors.rb:52:in `call'
+  mongoid (2.4.7) lib/rack/mongoid/middleware/identity_map.rb:33:in `block in call'
+  mongoid (2.4.7) lib/mongoid.rb:132:in `unit_of_work'
+  mongoid (2.4.7) lib/rack/mongoid/middleware/identity_map.rb:33:in `call'
+  exception_notification_rails3 (1.2.0) lib/exception_notifier.rb:34:in `call'
+  actionpack (3.2.2) lib/action_dispatch/middleware/best_standards_support.rb:17:in `call'
+  rack (1.4.1) lib/rack/etag.rb:23:in `call'
+  rack (1.4.1) lib/rack/conditionalget.rb:35:in `call'
+  actionpack (3.2.2) lib/action_dispatch/middleware/head.rb:14:in `call'
+  actionpack (3.2.2) lib/action_dispatch/middleware/params_parser.rb:21:in `call'
+  actionpack (3.2.2) lib/action_dispatch/middleware/flash.rb:242:in `call'
+  rack (1.4.1) lib/rack/session/abstract/id.rb:205:in `context'
+  rack (1.4.1) lib/rack/session/abstract/id.rb:200:in `call'
+  actionpack (3.2.2) lib/action_dispatch/middleware/cookies.rb:338:in `call'
+  actionpack (3.2.2) lib/action_dispatch/middleware/callbacks.rb:28:in `block in call'
+  activesupport (3.2.2) lib/active_support/callbacks.rb:405:in `_run__25157328104805022__call__3478047335913827214__callbacks'
+  activesupport (3.2.2) lib/active_support/callbacks.rb:405:in `__run_callback'
+  activesupport (3.2.2) lib/active_support/callbacks.rb:385:in `_run_call_callbacks'
+  activesupport (3.2.2) lib/active_support/callbacks.rb:81:in `run_callbacks'
+  actionpack (3.2.2) lib/action_dispatch/middleware/callbacks.rb:27:in `call'
+  actionpack (3.2.2) lib/action_dispatch/middleware/reloader.rb:65:in `call'
+  actionpack (3.2.2) lib/action_dispatch/middleware/remote_ip.rb:31:in `call'
+  actionpack (3.2.2) lib/action_dispatch/middleware/debug_exceptions.rb:16:in `call'
+  actionpack (3.2.2) lib/action_dispatch/middleware/show_exceptions.rb:56:in `call'
+  railties (3.2.2) lib/rails/rack/logger.rb:26:in `call_app'
+  railties (3.2.2) lib/rails/rack/logger.rb:16:in `call'
+  actionpack (3.2.2) lib/action_dispatch/middleware/request_id.rb:22:in `call'
+  rack (1.4.1) lib/rack/methodoverride.rb:21:in `call'
+  rack (1.4.1) lib/rack/runtime.rb:17:in `call'
+  activesupport (3.2.2) lib/active_support/cache/strategy/local_cache.rb:72:in `call'
+  rack (1.4.1) lib/rack/lock.rb:15:in `call'
+  actionpack (3.2.2) lib/action_dispatch/middleware/static.rb:61:in `call'
+  railties (3.2.2) lib/rails/engine.rb:479:in `call'
+  railties (3.2.2) lib/rails/application.rb:220:in `call'
+  railties (3.2.2) lib/rails/railtie/configurable.rb:30:in `method_missing'
+  passenger (3.0.11) lib/phusion_passenger/rack/request_handler.rb:96:in `process_request'
+  passenger (3.0.11) lib/phusion_passenger/abstract_request_handler.rb:513:in `accept_and_process_next_request'
+  passenger (3.0.11) lib/phusion_passenger/abstract_request_handler.rb:274:in `main_loop'
+  passenger (3.0.11) lib/phusion_passenger/rack/application_spawner.rb:206:in `start_request_handler'
+  passenger (3.0.11) lib/phusion_passenger/rack/application_spawner.rb:171:in `block in handle_spawn_application'
+  passenger (3.0.11) lib/phusion_passenger/utils.rb:479:in `safe_fork'
+  passenger (3.0.11) lib/phusion_passenger/rack/application_spawner.rb:166:in `handle_spawn_application'
+  passenger (3.0.11) lib/phusion_passenger/abstract_server.rb:357:in `server_main_loop'
+  passenger (3.0.11) lib/phusion_passenger/abstract_server.rb:206:in `start_synchronously'
+  passenger (3.0.11) lib/phusion_passenger/abstract_server.rb:180:in `start'
+  passenger (3.0.11) lib/phusion_passenger/rack/application_spawner.rb:129:in `start'
+  passenger (3.0.11) lib/phusion_passenger/spawn_manager.rb:253:in `block (2 levels) in spawn_rack_application'
+  passenger (3.0.11) lib/phusion_passenger/abstract_server_collection.rb:132:in `lookup_or_add'
+  passenger (3.0.11) lib/phusion_passenger/spawn_manager.rb:246:in `block in spawn_rack_application'
+  passenger (3.0.11) lib/phusion_passenger/abstract_server_collection.rb:82:in `block in synchronize'
+  &lt;internal:prelude&gt;:10:in `synchronize'
+  passenger (3.0.11) lib/phusion_passenger/abstract_server_collection.rb:79:in `synchronize'
+  passenger (3.0.11) lib/phusion_passenger/spawn_manager.rb:244:in `spawn_rack_application'
+  passenger (3.0.11) lib/phusion_passenger/spawn_manager.rb:137:in `spawn_application'
+  passenger (3.0.11) lib/phusion_passenger/spawn_manager.rb:275:in `handle_spawn_application'
+  passenger (3.0.11) lib/phusion_passenger/abstract_server.rb:357:in `server_main_loop'
+  passenger (3.0.11) lib/phusion_passenger/abstract_server.rb:206:in `start_synchronously'
+  passenger (3.0.11) helper-scripts/passenger-spawn-server:99:in `&lt;main&gt;'
+
+
+</pre>
+

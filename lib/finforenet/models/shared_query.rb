@@ -63,8 +63,8 @@ module Finforenet
 		    
 		    def profiles_query(user, options = {})
 		    	profile_ids = user.user_profiles.map(&:profile_id)
-		    	feed_info_ids = FeedInfo::Profile.where(:profile_id.in => profile_ids).map(&:feed_info_id)
-		    	options[:_id] = {"$in" => feed_info_ids} unless feed_info_ids.size < 1
+		    	# feed_info_ids = FeedInfo::Profile.where(:profile_id.in => profile_ids).map(&:feed_info_id)
+		    	options[:_profile_ids] = {"$in" => profile_ids} unless profile_ids.size < 1
 		    	return options
 		    end
 		    
