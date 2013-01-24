@@ -1,5 +1,5 @@
 require 'ostruct'
-["finforenet","authlogic"].each do |folder|
+["finforenet","authlogic","twitter_oauth"].each do |folder|
   Dir[File.join(Rails.root, "lib", folder, "**", "*.rb")].sort.each { |lib| require(lib) }
 end
 

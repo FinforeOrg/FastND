@@ -20,7 +20,7 @@ class TweetforesController < ApplicationController
   end
 
   def search
-    tweets = @tweetfore ? @tweetfore.search(params) : error_object("Invalid Token or Reference")
+    tweets = @tweetfore ? @tweetfore.search(params[:q],params) : error_object("Invalid Token or Reference")
     respond_to do |format|
       respond_to_do(format,tweets)
     end
@@ -152,7 +152,7 @@ class TweetforesController < ApplicationController
   private
     def respond_rescue(e)
       respond_to do |format|
-        format.json { render :json => e.to_json,:status => 200 }
+        format.json { render :json => e.response,:status => 200}
       end
     end
 
@@ -168,17 +168,16 @@ class TweetforesController < ApplicationController
         user = User.where(:login => current_user.login).first
         feed_account = user.feed_accounts.find(params[:feed_account_id])
         #params[:feed_token_id] = feed_account.feed_token.id
-		@feed_token = feed_account.feed_token
+		  @feed_token = feed_account.feed_token
       #end
       #@feed_token = FeedToken.where(params[:feed_token_id],current_user.id)
-      @tweetfore = TwitterOAuth::Client.new(
-                    :consumer_key => @twitter_api,
-                    :consumer_secret => @twitter_secret,
-                    :token => @feed_token.token,
-                    :secret => @feed_token.secret
-                ) if @feed_token
+      oauth_options = {consumer_key: @twitter_api, consumer_secret: @twitter_secret, token: @feed_token.token, secret: @feed_token.secret}
+      oauth_options.merge!(api_version: "1.1", search_host: "api.twitter.com", debug: true) if params[:action] == "search"
+      @tweetfore = TwitterOAuth::Client.new(oauth_options) if @feed_token
       params.delete(:feed_token_id)
       params.delete(:feed_account_id)
+      params.delete(:auth_token)
+      params.delete(:auth_secret)
       #rescue => e
       # respond_rescue(e)
     end
