@@ -58,7 +58,7 @@ module Finforenet
 				  end
 				  
 				  def supported_formats(format, response, status = 200)
-				    format.json { render :json => response, :status => status, :head => :ok}
+				    format.json { render :json => response, :status => status, :head => :ok, :callback => params[:callback]}
 				    format.xml  { render :xml  => response, :status => status, :head => :ok}
 				  end
 			

@@ -20,7 +20,9 @@ class TweetforesController < ApplicationController
   end
 
   def search
+    callback = params[:callback]
     tweets = @tweetfore ? @tweetfore.search(params[:q],params) : error_object("Invalid Token or Reference")
+    params[:callback] = callback
     respond_to do |format|
       respond_to_do(format,tweets)
     end
