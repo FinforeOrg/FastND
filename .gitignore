@@ -1,5 +1,7 @@
 Gemfile.lock
+config/mongoid.yml
 log/*
+tmp/*
 public/*
 .DS_Store
 */.DS_Store
