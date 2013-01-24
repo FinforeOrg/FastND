@@ -194,7 +194,7 @@ class TweetforesController < ApplicationController
     end
 
     def formated_old_tweets(tweets)
-      return tweets if params[:old_version].to_s != "true"
+      return tweets if params[:new_version].to_s != "true"
       {
         "completed_in" => tweets["search_metadata"]["completed_in"],
         "max_id" => tweets["search_metadata"]["max_id"],
