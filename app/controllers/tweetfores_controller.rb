@@ -24,10 +24,10 @@ class TweetforesController < ApplicationController
     tweets = @tweetfore ? @tweetfore.search(params[:q],params) : error_object("Invalid Token or Reference")
     params[:callback] = callback
     respond_to do |format|
-      respond_to_do(format,tweets)
+      respond_to_do(format,formated_old_tweets(tweets))
     end
-    #rescue => e
-    # respond_rescue(e)
+    # rescue => e
+    #   respond_rescue(e)
   end
 
   def messages_inbox
@@ -174,7 +174,7 @@ class TweetforesController < ApplicationController
         feed_account = current_user.feed_accounts.where({"feed_token" => {"$ne" => nil}, :category => "twitter"}).shuffle.first
         @feed_token = feed_account.feed_token
       end
-      
+      @page = params[:page].to_i
       oauth_options = {consumer_key: @twitter_api, consumer_secret: @twitter_secret, token: @feed_token.token, secret: @feed_token.secret}
       oauth_options.merge!(api_version: "1.1", search_host: "api.twitter.com") if params[:action] == "search"
       @tweetfore = TwitterOAuth::Client.new(oauth_options) if @feed_token
@@ -191,6 +191,42 @@ class TweetforesController < ApplicationController
       @linkedin_secret = 'TPHkKZdW_Wt1Mc_TScbj9e5eSzHHs62ERCDB1kVTKXlQwivapUaOP0Tw_1NcGOq9'
       @twitter_api = 'RhXx78t99jxXAf44NwY4w'
       @twitter_secret = 'ty0AhbgCaDQULguJTQlCBgEO8vi4i4ZtPMR2LEM2KM'
+    end
+
+    def formated_old_tweets(tweets)
+      {
+        "completed_in" => tweets["search_metadata"]["completed_in"],
+        "max_id" => tweets["search_metadata"]["max_id"],
+        "max_id_str" => tweets["search_metadata"]["max_id_str"],
+        "next_page" => tweets["search_metadata"]["next_results"],
+        "page" => @page,
+        "query" => tweets["search_metadata"]["query"],
+        "refresh_url" => tweets["search_metadata"]["refresh_url"],
+        "results" => tweets["statuses"].map{|status| {
+            "created_at" => status["created_at"],
+            "from_user" => status["user"]["name"],
+            "from_user_id_str" => status["user"]["id_str"],
+            "from_user_name" => status["user"]["screen_name"],
+            "from_user_location" => status["user"]["location"],
+            "geo" => status["geo"],
+            "id" => status["id"],
+            "id_str" => status["id_str"],
+            "iso_language_code" => status["metadata"]["iso_language_code"],
+            "metadata" => {
+              "result_type" => status["metadata"]["result_type"]
+            },
+            "profile_image_url" => status["user"]["profile_image_url"],
+            "source" => status["source"],
+            "text" => status["text"],
+            "to_user_id_str" => status["in_reply_to_user_id_str"],
+            "retweet_count" => status["retweet_count"],
+            "retweeted" => status["retweeted"],
+            "place" => status["place"]
+          }},
+        "results_per_page" => tweets["search_metadata"]["count"],
+        "since_id" => tweets["search_metadata"]["since_id"],
+        "since_id_str" => tweets["search_metadata"]["since_id_str"]
+      }
     end
 
 end
