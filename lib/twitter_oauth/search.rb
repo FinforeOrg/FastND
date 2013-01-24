@@ -3,9 +3,7 @@ require 'open-uri'
 module TwitterOAuth
   class Client
 
-    def search(q, args={})
-      options = args
-      options.delete(:callback)
+    def search(q, options={})
       if @api_version.to_f > 1
         options[:count] = options[:rpp] ||= 20
         options.delete(:rpp)
