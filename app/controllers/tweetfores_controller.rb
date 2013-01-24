@@ -24,8 +24,8 @@ class TweetforesController < ApplicationController
     respond_to do |format|
       respond_to_do(format,tweets)
     end
-    rescue => e
-     respond_rescue(e)
+    #rescue => e
+    # respond_rescue(e)
   end
 
   def messages_inbox
@@ -152,7 +152,7 @@ class TweetforesController < ApplicationController
   private
     def respond_rescue(e)
       respond_to do |format|
-        format.json { render :json => e.response,:status => 200}
+        format.json { render :json => e,:status => 200}
       end
     end
 
@@ -164,15 +164,17 @@ class TweetforesController < ApplicationController
       else
         make_api
       end
-      #if params[:feed_account_id]
-        user = User.where(:login => current_user.login).first
-        feed_account = user.feed_accounts.find(params[:feed_account_id])
-        #params[:feed_token_id] = feed_account.feed_token.id
-		  @feed_token = feed_account.feed_token
-      #end
-      #@feed_token = FeedToken.where(params[:feed_token_id],current_user.id)
+      
+      if params[:feed_account_id]
+        feed_account = current_user.feed_accounts.find(params[:feed_account_id])
+		    @feed_token = feed_account.feed_token
+      elsif params[:action] == "search"
+        feed_account = current_user.feed_accounts.where({"feed_token" => {"$ne" => nil}, :category => "twitter"}).shuffle.first
+        @feed_token = feed_account.feed_token
+      end
+      
       oauth_options = {consumer_key: @twitter_api, consumer_secret: @twitter_secret, token: @feed_token.token, secret: @feed_token.secret}
-      oauth_options.merge!(api_version: "1.1", search_host: "api.twitter.com", debug: true) if params[:action] == "search"
+      oauth_options.merge!(api_version: "1.1", search_host: "api.twitter.com") if params[:action] == "search"
       @tweetfore = TwitterOAuth::Client.new(oauth_options) if @feed_token
       params.delete(:feed_token_id)
       params.delete(:feed_account_id)
