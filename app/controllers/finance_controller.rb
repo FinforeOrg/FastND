@@ -1,5 +1,6 @@
 class FinanceController < ApplicationController
   skip_before_filter :require_user, :only => [:blog]
+  caches_action :blog, :cache_path => :cache_action_name.to_proc, :gzip => :best_speed, :expires_in => 10.minutes
 
   def info
     tickers = clean_body(get_finance(google_finance_url))
@@ -11,13 +12,18 @@ class FinanceController < ApplicationController
     render :xml => @news
   end
 
+  def cache_action_name
+    name_path = "#{params[:q].to_s.gsub(/\W/,'_')}_#{language}_#{per_page}"
+    return Digest::MD5.hexdigest(name_path)
+  end
+
   private
     def google_finance_url
       "http://www.google.com/finance/info?infotype=infoquoteall&q=#{params[:q]}"
     end
 
     def google_blog_url
-      "http://www.google.com/search?hl=en&q=#{params[:q]}&ie=utf-8&tbm=blg&num=#{per_page}&output=#{output_type}"
+      "http://www.google.com/search?hl=#{language}&q=#{params[:q]}&ie=utf-8&tbm=blg&num=#{per_page}&output=#{output_type}"
     end
 
     def get_finance(url)
@@ -30,6 +36,10 @@ class FinanceController < ApplicationController
 
     def per_page
       params[:num].to_i > 0 ? params[:num] : 100
+    end
+
+    def language
+      params[:hl] || "en"
     end
 
     def output_type
