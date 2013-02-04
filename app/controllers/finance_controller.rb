@@ -1,13 +1,23 @@
 class FinanceController < ApplicationController
+  skip_before_filter :require_user, :only => [:blog]
 
   def info
     tickers = clean_body(get_finance(google_finance_url))
     render :json => eval(tickers).to_json, :callback => params[:callback]
   end
 
+  def blog
+    @news = clean_body(get_finance(google_blog_url))
+    render :xml => @news
+  end
+
   private
     def google_finance_url
       "http://www.google.com/finance/info?infotype=infoquoteall&q=#{params[:q]}"
+    end
+
+    def google_blog_url
+      "http://www.google.com/search?hl=en&q=#{params[:q]}&ie=utf-8&tbm=blg&num=#{per_page}&output=#{output_type}"
     end
 
     def get_finance(url)
@@ -16,6 +26,14 @@ class FinanceController < ApplicationController
 
     def clean_body(result)
       result.gsub(/\n|^\/\/\s/,"").gsub(/\s\:\s/, "=>").gsub(/\"\:/,"\"=>")
+    end
+
+    def per_page
+      params[:num].to_i > 0 ? params[:num] : 100
+    end
+
+    def output_type
+      params[:output] || "rss"
     end
 
     def random_agents

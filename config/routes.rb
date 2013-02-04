@@ -81,6 +81,7 @@ FinforeWeb::Application.routes.draw do
   resources :feed_infos
   
   get   '/finance/info'             => 'finance#info'  
+  get   '/finance/blog'             => 'finance#blog'
   match '/client/login'             => 'user_sessions#new'
   match '/logout'                   => 'user_sessions#destroy'
   match 'auth/:provider'            => 'user_sessions#network_sign_in'
