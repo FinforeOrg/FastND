@@ -39,6 +39,7 @@ gem 'resque'
 gem 'redis'
 gem 'redis-namespace'
 gem 'redis-store'
+gem 'tor_requests'
 
 # CSV File Handler
 gem 'fastercsv'
