@@ -4,6 +4,7 @@ FinforeWeb::Application.routes.draw do
     collection do
       get :forgot_password
       get :profiles
+      get :update_frontpage
       post :contact_admin
     end
   end
@@ -81,7 +82,7 @@ FinforeWeb::Application.routes.draw do
   resources :feed_infos
   
   get   '/finance/info'             => 'finance#info'  
-  get   '/finance/blog'             => 'finance#blog'
+  match '/finance/blog'             => 'finance#blog', via: [:get, :post]
   match '/client/login'             => 'user_sessions#new'
   match '/logout'                   => 'user_sessions#destroy'
   match 'auth/:provider'            => 'user_sessions#network_sign_in'
