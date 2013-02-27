@@ -4,11 +4,10 @@ class FeedInfo::Profile
   include Mongoid::History::Trackable
   track_history   :on => [:all],
                   :modifier_field => :modifier,
-                  :version_field  => :version,
                   :track_create   =>  true,
                   :track_update   =>  true,
                   :track_destroy  =>  true
-                  
+
   field :category, type: String
 	index :feed_info_id
 	index :profile_id

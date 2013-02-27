@@ -4,7 +4,6 @@ class ProfileCategory
   include Mongoid::History::Trackable
   track_history   :on => [:all],
                   :modifier_field => :modifier,
-                  :version_field  => :version,
                   :track_create   =>  true,
                   :track_update   =>  true,
                   :track_destroy  =>  true

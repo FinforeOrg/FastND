@@ -2,6 +2,12 @@ class User
   include Mongoid::Document
   include Mongoid::Timestamps
   include Finforenet::Models::ExtUser
+  include Mongoid::History::Trackable
+  track_history   :on => [:all],
+                  :modifier_field => :modifier,
+                  :track_create   =>  true,
+                  :track_update   =>  true,
+                  :track_destroy  =>  true
    
   field :email_work,            :type => String
   field :login,                 :type => String
