@@ -1,6 +1,14 @@
 class PopulateFeedInfo
   include Mongoid::Document
-  
+  include Mongoid::Timestamps
+  include Mongoid::History::Trackable
+  track_history   :on => [:all],
+                  :modifier_field => :modifier,
+                  :version_field  => :version,
+                  :track_create   =>  true,
+                  :track_update   =>  true,
+                  :track_destroy  =>  true
+                  
   field :is_company_tab, :type => Boolean
   
   belongs_to :feed_info, :index => true

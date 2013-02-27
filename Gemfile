@@ -20,6 +20,7 @@ gem 'crack'
 
 #Database
 gem 'mongoid', '2.4.7'
+gem 'mongoid-history'
 gem 'railroady', :path => "./vendor/gems/railroady"
 
 # Data Support Builders
