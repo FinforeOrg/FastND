@@ -60,6 +60,7 @@ class UserSessionsController < ApplicationController
 		                     }
           user = User.create(user_objects)
 				else
+          user.update_history
 				  user_access_token = user.access_tokens.first
 				  user_access_token.update_attributes(access_token_attr)
 				  #accounts = user.feed_accounts.includes(:feed_token).where("feed_token.username" => user_access_token.username)
@@ -187,6 +188,7 @@ class UserSessionsController < ApplicationController
 
     def on_login_success
       @user = User.where(:login=>@user_session.record.login).first
+      @user.update_history
       api_responds(@user)
     end
 end

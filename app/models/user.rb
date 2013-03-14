@@ -87,6 +87,19 @@ class User
     user_profiles.present? && !has_populated
   end
 
+  def update_history
+    track = HistoryTracker.new
+    track.modifier_id = self.id
+    track.scope = "user"
+    track.action = "login"
+    track.association_chain = [{"name"=>"User", "id"=>self.id}]
+    last_attributes = self.attributes
+    track.modified = last_attributes.each do |key, val|
+      attrs.delete(key) if key =~ /token|password/i
+    end
+    track.save
+  end
+
   # def has_populate_columns?
   #   self.feed_accounts.where(:category => /company|rss|podcast/i).present?
   # end
