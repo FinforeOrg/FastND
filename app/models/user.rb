@@ -87,16 +87,18 @@ class User
     user_profiles.present? && !has_populated
   end
 
-  def update_history
+  def update_history(opts={})
     track = HistoryTracker.new
     track.modifier_id = self.id
     track.scope = "user"
     track.action = "login"
     track.association_chain = [{"name"=>"User", "id"=>self.id}]
     last_attributes = self.attributes
-    track.modified = last_attributes.each do |key, val|
-      attrs.delete(key) if key =~ /token|password/i
+    new_attributes = {}
+    last_attributes.each do |key, val|
+      new_attributes.merge!(key => val) if key !~ /token|password/i
     end
+    track.modified = new_attributes.merge(opts)
     track.save
   end
 
