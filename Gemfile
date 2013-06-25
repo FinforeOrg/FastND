@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.2.11'
+gem 'rails', '3.2.13'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
@@ -48,7 +48,7 @@ gem 'fastercsv'
 # Oauth Authentication
 gem 'oauth'
 gem 'oauth2'
-gem 'twitter_oauth'
+gem 'twitter_oauth', "~> 0.4.93"
 gem 'gmail_xoauth', :path => "./vendor/gems/gmail_xoauth"
 
 # User Authentication
