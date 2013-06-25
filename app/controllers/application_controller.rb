@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
   private 
     def current_user_session
       return @current_user_session if @current_user_session
-      @current_user_session = @current_user_session = UserSession.find
+      @current_user_session = UserSession.find
       if @current_user_session && @current_user_session.record
         if @current_user_session.record.single_access_token == params[:auth_token]
           return @current_user_session

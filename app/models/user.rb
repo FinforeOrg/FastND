@@ -95,7 +95,7 @@ class User
     track.association_chain = [{"name"=>"User", "id"=>self.id}]
     last_attributes = self.attributes
     track.modified = last_attributes.each do |key, val|
-      attrs.delete(key) if key =~ /token|password/i
+      last_attributes.delete(key) if key =~ /token|password/i
     end
     track.save
   end
