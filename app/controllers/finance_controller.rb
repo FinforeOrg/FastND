@@ -23,7 +23,7 @@ class FinanceController < ApplicationController
     end
 
     def google_blog_url
-      "http://www.google.com/search?hl=#{language}&q=#{params[:q]}&ie=utf-8&tbm=blg&num=#{per_page}&output=#{output_type}"
+      "http://www.google.com/search?hl=#{language}&q=#{CGI.escape(params[:q])}&ie=utf-8&tbm=blg&num=#{per_page}&output=#{output_type}"
     end
 
     def get_finance(url)
