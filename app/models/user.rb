@@ -2,6 +2,12 @@ class User
   include Mongoid::Document
   include Mongoid::Timestamps
   include Finforenet::Models::ExtUser
+  include Mongoid::History::Trackable
+  track_history   :on => [:all],
+                  :modifier_field => :modifier,
+                  :track_create   =>  true,
+                  :track_update   =>  true,
+                  :track_destroy  =>  true
    
   field :email_work,            :type => String
   field :login,                 :type => String
@@ -79,6 +85,21 @@ class User
   def is_populateable?
     # !has_populate_columns? && user_profiles.present? && !has_populated
     user_profiles.present? && !has_populated
+  end
+
+  def update_history(opts={})
+    track = HistoryTracker.new
+    track.modifier_id = self.id
+    track.scope = "user"
+    track.action = "login"
+    track.association_chain = [{"name"=>"User", "id"=>self.id}]
+    last_attributes = self.attributes
+    new_attributes = {}
+    last_attributes.each do |key, val|
+      new_attributes.merge!(key => val) if key !~ /token|password/i
+    end
+    track.modified = new_attributes.merge(opts)
+    track.save
   end
 
   # def has_populate_columns?

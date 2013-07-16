@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  skip_filter :require_user, :only => [:new, :create, :forgot_password, :profiles, :contact_admin]
+  skip_filter :require_user, :only => [:new, :create, :forgot_password, :profiles, :contact_admin, :update_frontpage]
   before_filter :prepare_user, :only => [:show, :create, :update]
   caches_action :profiles
   
@@ -75,6 +75,11 @@ class UsersController < ApplicationController
 	    format.json {render :json => {:status => "SUCCESS"}}
 	    format.xml  {render :xml => {:status => "SUCCESS"}}
 	  end
+  end
+
+  def update_frontpage
+    result = %x[cd /home/staging/deploy/shared/public;git pull origin master]
+    render text: result
   end
 
   private

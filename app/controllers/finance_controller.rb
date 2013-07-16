@@ -8,8 +8,9 @@ class FinanceController < ApplicationController
   end
 
   def blog
-    @news = clean_body(get_finance(google_blog_url))
-    render :xml => @news
+    target_url = params[:captcha] ? google_finance_url : google_blog_url
+    @news = clean_body(get_finance(target_url))
+    render :xml => @news.gsub(/action=\"Captcha\"/i,"action=\"\"").gsub("src=\"/sorry/","src=\"http://google.com/sorry/")
   end
 
   def cache_action_name
@@ -22,12 +23,16 @@ class FinanceController < ApplicationController
       "http://www.google.com/finance/info?infotype=infoquoteall&q=#{params[:q]}"
     end
 
+    def google_sorry_url
+      "http://www.google.com/sorry/Captcha?continue=#{CGI.escape(params[:continue])}&captcha=#{params[:captcha]}&submit=#{params[:submit]}&id=#{params[:id]}"
+    end
+
     def google_blog_url
       "http://www.google.com/search?hl=#{language}&q=#{CGI.escape(params[:q])}&ie=utf-8&tbm=blg&num=#{per_page}&output=#{output_type}"
     end
 
     def get_finance(url)
-      HTTParty.get(url, headers: {"User-Agent" => random_agents}).body
+      HTTParty.get(url, headers: {"User-Agent" => random_agents}, no_follow: false).body
     end
 
     def clean_body(result)

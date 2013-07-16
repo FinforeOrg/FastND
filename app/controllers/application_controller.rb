@@ -11,15 +11,25 @@ class ApplicationController < ActionController::Base
   private 
     def current_user_session
       return @current_user_session if defined?(@current_user_session)
-      unless params[:auth_token].blank?
-	     user = User.auth_by_token(params)
-		   if user
-		     @current_user_session = UserSession.new(user)
-		     @current_user_session.save
-		   end
-      else
-		     @current_user_session = UserSession.find
+      begin
+        @current_user_session = UserSession.find
+      rescue
       end
+      if @current_user_session && @current_user_session.record
+        if @current_user_session.record.single_access_token == params[:auth_token]
+          return @current_user_session
+        end
+      end
+      unless params[:auth_token].blank?
+	      user = User.auth_by_token(params)
+		    if user
+		      @current_user_session = UserSession.new(user)
+		      @current_user_session.save
+          user.update_history({"current_login_ip" => request.remote_ip, "login_type"=> "token", "user_agent" => request.headers["HTTP_USER_AGENT"], "current_login_at" => Time.now})
+          return @current_user_session
+		    end
+      end
+      return nil
     end
 
     def current_user
