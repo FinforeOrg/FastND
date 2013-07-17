@@ -48,7 +48,7 @@ gem 'fastercsv'
 # Oauth Authentication
 gem 'oauth'
 gem 'oauth2'
-gem 'twitter_oauth', "~> 0.4.93"
+gem 'twitter_oauth', git: "git@github.com:moomerman/twitter_oauth.git" #"~> 0.4.93"
 gem 'gmail_xoauth', :path => "./vendor/gems/gmail_xoauth"
 
 # User Authentication

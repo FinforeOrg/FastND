@@ -1,3 +1,12 @@
+GIT
+  remote: git@github.com:moomerman/twitter_oauth.git
+  revision: 04e6bbfe635a376cae342d234214cdab864fe797
+  specs:
+    twitter_oauth (0.4.94)
+      json (>= 1.8.0)
+      mime-types (>= 1.16)
+      oauth (>= 0.4.7)
+
 PATH
   remote: ./vendor/gems/evansagge-mongoid-rspec-1.4.4-13
   specs:
@@ -320,10 +329,6 @@ GEM
     treetop (1.4.14)
       polyglot
       polyglot (>= 0.3.1)
-    twitter_oauth (0.4.93)
-      json (>= 1.8.0)
-      mime-types (>= 1.16)
-      oauth (>= 0.4.7)
     tzinfo (0.3.37)
     uglifier (2.1.1)
       execjs (>= 0.3.0)
@@ -403,7 +408,7 @@ DEPENDENCIES
   therubyracer
   thin
   tor_requests
-  twitter_oauth (~> 0.4.93)
+  twitter_oauth!
   uglifier (>= 1.0.3)
   unicorn
   xml-simple

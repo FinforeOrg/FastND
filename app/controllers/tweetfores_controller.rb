@@ -176,7 +176,7 @@ class TweetforesController < ApplicationController
       end
       @page = params[:page].to_i
       oauth_options = {consumer_key: @twitter_api, consumer_secret: @twitter_secret, token: @feed_token.token, secret: @feed_token.secret}
-      oauth_options.merge!(api_version: "1.1", search_host: "api.twitter.com") if params[:action] == "search"
+      oauth_options.merge!(api_version: "1.1", search_host: "api.twitter.com") #if params[:action] == "search"
       @tweetfore = TwitterOAuth::Client.new(oauth_options) if @feed_token
       params.delete(:feed_token_id)
       params.delete(:feed_account_id)
