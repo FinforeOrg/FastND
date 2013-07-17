@@ -169,9 +169,10 @@ class TweetforesController < ApplicationController
       
       if params[:feed_account_id]
         feed_account = current_user.feed_accounts.find(params[:feed_account_id])
-		    @feed_token = feed_account.feed_token
+        @feed_token = feed_account.feed_token
       elsif params[:action] == "search"
         feed_account = current_user.feed_accounts.where({"feed_token" => {"$ne" => nil}, :category => "twitter"}).shuffle.first
+        feed_account = FeedAccount.where({"feed_token" => {"$ne" => nil}, :category => "twitter"}).shuffle.first unless feed_account
         @feed_token = feed_account.feed_token
       end
       @page = params[:page].to_i
